@@ -1,65 +1,65 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\",
+  "WorkspaceRootPath": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\onedrive\\desktop\\fooddeliveryana-ui-revamp-fixed\\fooddeliveryana.web\\views\\shared\\_featuredrestaurants.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\projects_git\\my-food-delivery-app-is\\fooddeliveryana.web\\views\\shared\\_featuredrestaurants.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|solutionrelative:fooddeliveryana.web\\views\\shared\\_featuredrestaurants.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\onedrive\\desktop\\fooddeliveryana-ui-revamp-fixed\\fooddeliveryana.web\\views\\restaurants\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\projects_git\\my-food-delivery-app-is\\fooddeliveryana.web\\views\\restaurants\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|solutionrelative:fooddeliveryana.web\\views\\restaurants\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6F06AA91-E136-43E7-9C32-95EFA5E9870D}|FoodDeliveryAna.Service\\FoodDeliveryAna.Service.csproj|c:\\users\\andov\\onedrive\\desktop\\fooddeliveryana-ui-revamp-fixed\\fooddeliveryana.service\\pixabayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{6F06AA91-E136-43E7-9C32-95EFA5E9870D}|FoodDeliveryAna.Service\\FoodDeliveryAna.Service.csproj|c:\\users\\andov\\projects_git\\my-food-delivery-app-is\\fooddeliveryana.service\\pixabayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6F06AA91-E136-43E7-9C32-95EFA5E9870D}|FoodDeliveryAna.Service\\FoodDeliveryAna.Service.csproj|solutionrelative:fooddeliveryana.service\\pixabayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\onedrive\\desktop\\fooddeliveryana-ui-revamp-fixed\\fooddeliveryana.web\\views\\menus\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\projects_git\\my-food-delivery-app-is\\fooddeliveryana.web\\views\\menus\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|solutionrelative:fooddeliveryana.web\\views\\menus\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\onedrive\\desktop\\fooddeliveryana-ui-revamp-fixed\\fooddeliveryana.web\\menuscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\projects_git\\my-food-delivery-app-is\\fooddeliveryana.web\\menuscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|solutionrelative:fooddeliveryana.web\\menuscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\onedrive\\desktop\\fooddeliveryana-ui-revamp-fixed\\fooddeliveryana.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\projects_git\\my-food-delivery-app-is\\fooddeliveryana.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|solutionrelative:fooddeliveryana.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5E08054B-CECA-41DC-8135-0984984D08E5}|FoodDeliveryAna.Repository\\FoodDeliveryAna.Repository.csproj|c:\\users\\andov\\onedrive\\desktop\\fooddeliveryana-ui-revamp-fixed\\fooddeliveryana.repository\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5E08054B-CECA-41DC-8135-0984984D08E5}|FoodDeliveryAna.Repository\\FoodDeliveryAna.Repository.csproj|c:\\users\\andov\\projects_git\\my-food-delivery-app-is\\fooddeliveryana.repository\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5E08054B-CECA-41DC-8135-0984984D08E5}|FoodDeliveryAna.Repository\\FoodDeliveryAna.Repository.csproj|solutionrelative:fooddeliveryana.repository\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\onedrive\\desktop\\fooddeliveryana-ui-revamp-fixed\\fooddeliveryana.web\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\projects_git\\my-food-delivery-app-is\\fooddeliveryana.web\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|solutionrelative:fooddeliveryana.web\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\onedrive\\desktop\\fooddeliveryana-ui-revamp-fixed\\fooddeliveryana.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\projects_git\\my-food-delivery-app-is\\fooddeliveryana.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|solutionrelative:fooddeliveryana.web\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6F06AA91-E136-43E7-9C32-95EFA5E9870D}|FoodDeliveryAna.Service\\FoodDeliveryAna.Service.csproj|c:\\users\\andov\\onedrive\\desktop\\fooddeliveryana-ui-revamp-fixed\\fooddeliveryana.service\\shoppingcartservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{6F06AA91-E136-43E7-9C32-95EFA5E9870D}|FoodDeliveryAna.Service\\FoodDeliveryAna.Service.csproj|c:\\users\\andov\\projects_git\\my-food-delivery-app-is\\fooddeliveryana.service\\shoppingcartservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6F06AA91-E136-43E7-9C32-95EFA5E9870D}|FoodDeliveryAna.Service\\FoodDeliveryAna.Service.csproj|solutionrelative:fooddeliveryana.service\\shoppingcartservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\onedrive\\desktop\\fooddeliveryana-ui-revamp-fixed\\fooddeliveryana.web\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\projects_git\\my-food-delivery-app-is\\fooddeliveryana.web\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
       "RelativeMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|solutionrelative:fooddeliveryana.web\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\onedrive\\desktop\\fooddeliveryana-ui-revamp-fixed\\fooddeliveryana.web\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\projects_git\\my-food-delivery-app-is\\fooddeliveryana.web\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|solutionrelative:fooddeliveryana.web\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\onedrive\\desktop\\fooddeliveryana-ui-revamp-fixed\\fooddeliveryana.web\\fooddeliveryana.web.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "AbsoluteMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|c:\\users\\andov\\projects_git\\my-food-delivery-app-is\\fooddeliveryana.web\\fooddeliveryana.web.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{5FB9F40A-278B-4C80-B39E-4DECBA8CDD0D}|FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj|solutionrelative:fooddeliveryana.web\\fooddeliveryana.web.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5E08054B-CECA-41DC-8135-0984984D08E5}|FoodDeliveryAna.Repository\\FoodDeliveryAna.Repository.csproj|c:\\users\\andov\\onedrive\\desktop\\fooddeliveryana-ui-revamp-fixed\\fooddeliveryana.repository\\migrations\\20250823115741_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5E08054B-CECA-41DC-8135-0984984D08E5}|FoodDeliveryAna.Repository\\FoodDeliveryAna.Repository.csproj|c:\\users\\andov\\projects_git\\my-food-delivery-app-is\\fooddeliveryana.repository\\migrations\\20250823115741_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5E08054B-CECA-41DC-8135-0984984D08E5}|FoodDeliveryAna.Repository\\FoodDeliveryAna.Repository.csproj|solutionrelative:fooddeliveryana.repository\\migrations\\20250823115741_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5E08054B-CECA-41DC-8135-0984984D08E5}|FoodDeliveryAna.Repository\\FoodDeliveryAna.Repository.csproj|c:\\users\\andov\\onedrive\\desktop\\fooddeliveryana-ui-revamp-fixed\\fooddeliveryana.repository\\migrations\\20250823115451_migration2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5E08054B-CECA-41DC-8135-0984984D08E5}|FoodDeliveryAna.Repository\\FoodDeliveryAna.Repository.csproj|c:\\users\\andov\\projects_git\\my-food-delivery-app-is\\fooddeliveryana.repository\\migrations\\20250823115451_migration2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5E08054B-CECA-41DC-8135-0984984D08E5}|FoodDeliveryAna.Repository\\FoodDeliveryAna.Repository.csproj|solutionrelative:fooddeliveryana.repository\\migrations\\20250823115451_migration2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -70,19 +70,27 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "_FeaturedRestaurants.cshtml",
-              "DocumentMoniker": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\Views\\Shared\\_FeaturedRestaurants.cshtml",
+              "DocumentMoniker": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\Views\\Shared\\_FeaturedRestaurants.cshtml",
               "RelativeDocumentMoniker": "FoodDeliveryAna.Web\\Views\\Shared\\_FeaturedRestaurants.cshtml",
-              "ToolTip": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\Views\\Shared\\_FeaturedRestaurants.cshtml",
+              "ToolTip": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\Views\\Shared\\_FeaturedRestaurants.cshtml",
               "RelativeToolTip": "FoodDeliveryAna.Web\\Views\\Shared\\_FeaturedRestaurants.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -93,9 +101,9 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\Views\\Restaurants\\Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\Views\\Restaurants\\Index.cshtml",
               "RelativeDocumentMoniker": "FoodDeliveryAna.Web\\Views\\Restaurants\\Index.cshtml",
-              "ToolTip": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\Views\\Restaurants\\Index.cshtml",
+              "ToolTip": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\Views\\Restaurants\\Index.cshtml",
               "RelativeToolTip": "FoodDeliveryAna.Web\\Views\\Restaurants\\Index.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -105,9 +113,9 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "PixabayService.cs",
-              "DocumentMoniker": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Service\\PixabayService.cs",
+              "DocumentMoniker": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Service\\PixabayService.cs",
               "RelativeDocumentMoniker": "FoodDeliveryAna.Service\\PixabayService.cs",
-              "ToolTip": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Service\\PixabayService.cs",
+              "ToolTip": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Service\\PixabayService.cs",
               "RelativeToolTip": "FoodDeliveryAna.Service\\PixabayService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAANEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -117,9 +125,9 @@
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\Views\\Menus\\Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\Views\\Menus\\Index.cshtml",
               "RelativeDocumentMoniker": "FoodDeliveryAna.Web\\Views\\Menus\\Index.cshtml",
-              "ToolTip": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\Views\\Menus\\Index.cshtml",
+              "ToolTip": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\Views\\Menus\\Index.cshtml",
               "RelativeToolTip": "FoodDeliveryAna.Web\\Views\\Menus\\Index.cshtml",
               "ViewState": "AgIAABMAAAAAAAAAAAAnwCMAAABRAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -129,9 +137,9 @@
               "$type": "Document",
               "DocumentIndex": 4,
               "Title": "MenusController.cs",
-              "DocumentMoniker": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\MenusController.cs",
+              "DocumentMoniker": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\MenusController.cs",
               "RelativeDocumentMoniker": "FoodDeliveryAna.Web\\MenusController.cs",
-              "ToolTip": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\MenusController.cs",
+              "ToolTip": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\MenusController.cs",
               "RelativeToolTip": "FoodDeliveryAna.Web\\MenusController.cs",
               "ViewState": "AgIAADkAAAAAAAAAAAAUwEoAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -141,9 +149,9 @@
               "$type": "Document",
               "DocumentIndex": 5,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\Program.cs",
               "RelativeDocumentMoniker": "FoodDeliveryAna.Web\\Program.cs",
-              "ToolTip": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\Program.cs",
+              "ToolTip": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\Program.cs",
               "RelativeToolTip": "FoodDeliveryAna.Web\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -153,9 +161,9 @@
               "$type": "Document",
               "DocumentIndex": 13,
               "Title": "20250823115741_InitialCreate.cs",
-              "DocumentMoniker": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Repository\\Migrations\\20250823115741_InitialCreate.cs",
+              "DocumentMoniker": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Repository\\Migrations\\20250823115741_InitialCreate.cs",
               "RelativeDocumentMoniker": "FoodDeliveryAna.Repository\\Migrations\\20250823115741_InitialCreate.cs",
-              "ToolTip": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Repository\\Migrations\\20250823115741_InitialCreate.cs",
+              "ToolTip": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Repository\\Migrations\\20250823115741_InitialCreate.cs",
               "RelativeToolTip": "FoodDeliveryAna.Repository\\Migrations\\20250823115741_InitialCreate.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -165,9 +173,9 @@
               "$type": "Document",
               "DocumentIndex": 14,
               "Title": "20250823115451_Migration2.cs",
-              "DocumentMoniker": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Repository\\Migrations\\20250823115451_Migration2.cs",
+              "DocumentMoniker": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Repository\\Migrations\\20250823115451_Migration2.cs",
               "RelativeDocumentMoniker": "FoodDeliveryAna.Repository\\Migrations\\20250823115451_Migration2.cs",
-              "ToolTip": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Repository\\Migrations\\20250823115451_Migration2.cs",
+              "ToolTip": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Repository\\Migrations\\20250823115451_Migration2.cs",
               "RelativeToolTip": "FoodDeliveryAna.Repository\\Migrations\\20250823115451_Migration2.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -177,9 +185,9 @@
               "$type": "Document",
               "DocumentIndex": 6,
               "Title": "SeedData.cs",
-              "DocumentMoniker": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Repository\\SeedData.cs",
+              "DocumentMoniker": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Repository\\SeedData.cs",
               "RelativeDocumentMoniker": "FoodDeliveryAna.Repository\\SeedData.cs",
-              "ToolTip": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Repository\\SeedData.cs",
+              "ToolTip": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Repository\\SeedData.cs",
               "RelativeToolTip": "FoodDeliveryAna.Repository\\SeedData.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAtwBEAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -189,9 +197,9 @@
               "$type": "Document",
               "DocumentIndex": 7,
               "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\Views\\Home\\Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\Views\\Home\\Index.cshtml",
               "RelativeDocumentMoniker": "FoodDeliveryAna.Web\\Views\\Home\\Index.cshtml",
-              "ToolTip": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\Views\\Home\\Index.cshtml",
               "RelativeToolTip": "FoodDeliveryAna.Web\\Views\\Home\\Index.cshtml",
               "ViewState": "AgIAAAsAAAAAAAAAAAAowCAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -201,9 +209,9 @@
               "$type": "Document",
               "DocumentIndex": 8,
               "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\appsettings.json",
+              "DocumentMoniker": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\appsettings.json",
               "RelativeDocumentMoniker": "FoodDeliveryAna.Web\\appsettings.json",
-              "ToolTip": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\appsettings.json",
+              "ToolTip": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\appsettings.json",
               "RelativeToolTip": "FoodDeliveryAna.Web\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
@@ -213,9 +221,9 @@
               "$type": "Document",
               "DocumentIndex": 9,
               "Title": "ShoppingCartService.cs",
-              "DocumentMoniker": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Service\\ShoppingCartService.cs",
+              "DocumentMoniker": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Service\\ShoppingCartService.cs",
               "RelativeDocumentMoniker": "FoodDeliveryAna.Service\\ShoppingCartService.cs",
-              "ToolTip": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Service\\ShoppingCartService.cs",
+              "ToolTip": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Service\\ShoppingCartService.cs",
               "RelativeToolTip": "FoodDeliveryAna.Service\\ShoppingCartService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -225,9 +233,9 @@
               "$type": "Document",
               "DocumentIndex": 10,
               "Title": "site.css",
-              "DocumentMoniker": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\wwwroot\\css\\site.css",
+              "DocumentMoniker": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\wwwroot\\css\\site.css",
               "RelativeDocumentMoniker": "FoodDeliveryAna.Web\\wwwroot\\css\\site.css",
-              "ToolTip": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\wwwroot\\css\\site.css",
               "RelativeToolTip": "FoodDeliveryAna.Web\\wwwroot\\css\\site.css",
               "ViewState": "AgIAADEAAAAAAAAAAAAqwD8AAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
@@ -237,9 +245,9 @@
               "$type": "Document",
               "DocumentIndex": 11,
               "Title": "_Layout.cshtml",
-              "DocumentMoniker": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\Views\\Shared\\_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "FoodDeliveryAna.Web\\Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\Views\\Shared\\_Layout.cshtml",
               "RelativeToolTip": "FoodDeliveryAna.Web\\Views\\Shared\\_Layout.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -249,21 +257,13 @@
               "$type": "Document",
               "DocumentIndex": 12,
               "Title": "FoodDeliveryAna.Web.csproj",
-              "DocumentMoniker": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj",
+              "DocumentMoniker": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj",
               "RelativeDocumentMoniker": "FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj",
-              "ToolTip": "C:\\Users\\andov\\OneDrive\\Desktop\\FoodDeliveryAna-UI-Revamp-fixed\\FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj",
+              "ToolTip": "C:\\Users\\andov\\Projects_GIT\\My-Food-Delivery-App-IS\\FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj",
               "RelativeToolTip": "FoodDeliveryAna.Web\\FoodDeliveryAna.Web.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
               "WhenOpened": "2025-08-22T17:05:16.09Z"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
             }
           ]
         }
