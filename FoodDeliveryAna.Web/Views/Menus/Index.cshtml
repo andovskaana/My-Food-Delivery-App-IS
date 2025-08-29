@@ -1,0 +1,51 @@
+@model IEnumerable<FoodDeliveryAna.Domain.DomainModels.MenuItem>
+@{
+    ViewData["Title"] = "Menu";
+}
+<h1 class="h4 fw-semibold mb-3">Menu items</h1>
+
+<div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+    <form method="get" asp-controller="Menus" asp-action="Index" class="d-flex gap-2">
+        <input name="q" value="@Context.Request.Query["q"]" class="form-control" placeholder="Search dishes..." />
+        <button type="submit" class="btn btn-outline-primary">Search</button>
+    </form>
+    <div class="ms-auto d-flex gap-2">
+        @{
+            string current = (Context.Request.Query["category"].ToString() ?? "").ToLower();
+            string query = Context.Request.Query["q"];
+            string rf(Guid? rid, Guid? mid, string cat) => Url.Action("Index", "Menus", new { restaurantId = Context.Request.Query["restaurantId"], menuId = Context.Request.Query["menuId"], q = query, category = cat })!;
+        }
+        <a class="btn btn-sm @(string.IsNullOrEmpty(current) ? "btn-primary" : "btn-outline-primary")" href="@rf(null, null, "")">All</a>
+        <a class="btn btn-sm @(current == "pizza" ? "btn-primary" : "btn-outline-primary")" href="@rf(null, null, "pizza")">Pizza</a>
+        <a class="btn btn-sm @(current == "burgers" ? "btn-primary" : "btn-outline-primary")" href="@rf(null, null, "burgers")">Burgers</a>
+        <a class="btn btn-sm @(current == "sushi" ? "btn-primary" : "btn-outline-primary")" href="@rf(null, null, "sushi")">Sushi</a>
+        <a class="btn btn-sm @(current == "dessert" ? "btn-primary" : "btn-outline-primary")" href="@rf(null, null, "dessert")">Desserts</a>
+    </div>
+</div>
+
+<div class="row g-4">
+    @foreach (var m in Model)
+    {
+        var img = string.IsNullOrWhiteSpace(m.ImageUrl)
+        ? "https://source.unsplash.com/640x360/?food"
+        : m.ImageUrl;
+
+        var restaurant = m.Menu?.Restaurant?.Name ?? m.Menu?.Title ?? "Restaurant";
+        <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card h-100">
+                <img class="card-img-top" src="@img" alt="@m.Name" loading="lazy" />
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="card-title mb-1">@m.Name</h5>
+                        <span class="badge bg-primary fs-6">@m.Price.ToString("C")</span>
+                    </div>
+                    <div class="text-muted small mb-3">from @restaurant</div>
+                    <form asp-controller="Cart" asp-action="Add" method="post" class="mt-auto">
+                        <input type="hidden" name="menuItemId" value="@m.Id" />
+                        <button type="submit" class="btn btn-primary w-100 btn-pill">Add to cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>

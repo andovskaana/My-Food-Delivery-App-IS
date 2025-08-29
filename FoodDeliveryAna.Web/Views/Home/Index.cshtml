@@ -1,0 +1,32 @@
+﻿﻿@{
+ViewData["Title"] = "Home";
+}
+<section class="hero rounded-3 p-4 p-md-5 mb-4 text-white position-relative overflow-hidden">
+    <div class="hero-bg"></div>
+    <div class="position-relative" style="z-index:2">
+        <h1 class="display-6 fw-bold mb-2">Food, fast.</h1>
+        <p class="lead mb-4">Order from the best restaurants around you. Fresh meals delivered to your door.</p>
+        <div class="d-flex gap-2">
+            <a class="btn btn-primary btn-lg btn-pill" asp-controller="Restaurants" asp-action="Index">Browse restaurants</a>
+            <a class="btn btn-outline-light btn-lg btn-pill" asp-controller="Menus" asp-action="Index">See all dishes</a>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <h2 class="h5 fw-semibold mb-3">Popular categories</h2>
+    <div class="row g-2">
+        <div class="col-6 col-md-3"><a class="category-tile" asp-controller="Menus" asp-action="Index" asp-route-category="pizza">🍕 Pizza</a></div>
+        <div class="col-6 col-md-3"><a class="category-tile" asp-controller="Menus" asp-action="Index" asp-route-category="burgers">🍔 Burgers</a></div>
+        <div class="col-6 col-md-3"><a class="category-tile" asp-controller="Menus" asp-action="Index" asp-route-category="sushi">🍣 Sushi</a></div>
+        <div class="col-6 col-md-3"><a class="category-tile" asp-controller="Menus" asp-action="Index" asp-route-category="dessert">🍰 Desserts</a></div>
+    </div>
+</section>
+
+<section>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h2 class="h5 fw-semibold mb-0">Featured restaurants</h2>
+        <a class="small text-decoration-none" asp-controller="Restaurants" asp-action="Index">View all</a>
+    </div>
+    @await Html.PartialAsync("~/Views/Shared/_FeaturedRestaurants.cshtml")
+</section>

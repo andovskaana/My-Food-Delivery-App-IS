@@ -1,0 +1,63 @@
+@model FoodDeliveryAna.Domain.DomainModels.ShoppingCart
+@{ ViewData["Title"] = "Your cart"; decimal total = Model.Items.Sum(i => (i.MenuItem?.Price ?? 0) * i.Quantity); }
+<h1 class="h4 fw-semibold mb-3">Your cart</h1>
+
+@if (!Model.Items.Any())
+{
+  <div class="text-center py-5">
+    <p class="text-muted mb-3">Your basket is empty.</p>
+    <a asp-controller="Restaurants" asp-action="Index" class="btn btn-primary btn-pill">Find something tasty</a>
+  </div>
+}
+else
+{
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <table class="table align-middle">
+        <thead>
+          <tr><th>Item</th><th style="width:140px">Qty</th><th class="text-end">Price</th><th></th></tr>
+        </thead>
+        <tbody>
+        @foreach (var i in Model.Items)
+        {
+          <tr>
+            <td>
+              <div class="d-flex align-items-center gap-3">
+                <img src="https://picsum.photos/seed/@i.MenuItem?.Name/80/80" alt="" class="rounded" width="64" height="64" />
+                <div>
+                  <div class="fw-semibold">@i.MenuItem?.Name</div>
+                  </div>
+              </div>
+            </td>
+            <td>
+              <form asp-action="UpdateQuantity" method="post" class="d-flex align-items-center gap-2">
+                <input type="hidden" name="cartItemId" value="@i.Id" />
+                <input name="quantity" type="number" class="form-control" value="@i.Quantity" min="1" style="width:90px" />
+                <button class="btn btn-outline-secondary btn-sm">Update</button>
+              </form>
+            </td>
+            <td class="text-end">@((i.MenuItem?.Price ?? 0) * i.Quantity).ToString("C")</td>
+            <td class="text-end">
+              <form asp-action="Remove" method="post">
+                <input type="hidden" name="cartItemId" value="@i.Id" />
+                <button class="btn btn-link text-danger">Remove</button>
+              </form>
+            </td>
+          </tr>
+        }
+        </tbody>
+      </table>
+    </div>
+    <div class="col-lg-4">
+      <div class="card p-3">
+        <div class="d-flex justify-content-between">
+          <span class="fw-semibold">Subtotal</span>
+          <span>@total.ToString("C")</span>
+        </div>
+        <hr/>
+        <a asp-controller="Orders" asp-action="Checkout" class="btn btn-primary w-100 btn-pill">Checkout</a>
+        <a asp-controller="Restaurants" asp-action="Index" class="btn btn-outline-dark w-100 mt-2 btn-pill">Continue shopping</a>
+      </div>
+    </div>
+  </div>
+}

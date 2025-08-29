@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - FoodDeliveryAna</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body class="bg-light" style="--brand:#7C3AED; --brand-600:#6D28D9; --brand-700:#5B21B6;">
+    <header class="border-bottom bg-white">
+        <nav class="navbar navbar-expand-lg container py-3">
+            <a class="navbar-brand fw-semibold d-flex align-items-center gap-2" asp-area="" asp-controller="Home" asp-action="Index">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-bag-check" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 7.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5"/>
+                  <path d="M10.5 3a1.5 1.5 0 0 1 1.415 1h.585a1 1 0 0 1 1 1v8.5A1.5 1.5 0 0 1 12 15H4a1.5 1.5 0 0 1-1.5-1.5V5a1 1 0 0 1 1-1h.585A1.5 1.5 0 0 1 5.5 3h5Zm-5 1A.5.5 0 0 0 5 4.5V5h6v-.5a.5.5 0 0 0-.5-.5h-5Z"/>
+                </svg>
+                <span class="fs-5">FoodDeliveryAna</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" asp-controller="Restaurants" asp-action="Index">Restaurants</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Menus" asp-action="Index">Menus</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Orders" asp-action="History">My orders</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <a class="btn position-relative btn-outline-dark" asp-controller="Cart" asp-action="Index">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-basket" viewBox="0 0 16 16">
+                          <path d="M2.31 5.243 7 1l4.69 4.243a1 1 0 0 1-.69 1.757H3a1 1 0 0 1-.69-1.757Z"/>
+                          <path d="M2 6h12l-1 8.5A1.5 1.5 0 0 1 11.5 16h-7A1.5 1.5 0 0 1 3 14.5L2 6Z"/>
+                        </svg>
+                        <span class="ms-2">Cart</span>
+                        <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"> </span>
+                    </a>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main role="main" class="container py-4">
+        @RenderBody()
+    </main>
+    <footer class="border-top mt-auto bg-white">
+        <div class="container py-4 small text-muted d-flex justify-content-between">
+            <span>&copy; @DateTime.Now.Year - FoodDeliveryAna</span>
+            <a class="text-decoration-none" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

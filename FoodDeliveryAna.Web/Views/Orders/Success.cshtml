@@ -1,0 +1,51 @@
+@model FoodDeliveryAna.Domain.DomainModels.Order
+
+@{
+    ViewData["Title"] = "Order Successful";
+}
+
+<h2>Thank you for your order!</h2>
+
+<p>Your order has been placed successfully. Below is your order summary.</p>
+
+<div class="mb-3">
+    <strong>Order ID:</strong> @Model.Id
+</div>
+<div class="mb-3">
+    <strong>Date:</strong> @Model.CreatedAt.ToLocalTime().ToString("dd MMM yyyy HH:mm")
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+    @{
+        decimal total = 0;
+        foreach (var item in Model.Items)
+        {
+            var sub = item.UnitPrice * item.Quantity;
+            total += sub;
+            <tr>
+                <td>@item.MenuItemName</td>
+                <td>@item.UnitPrice.ToString("C")</td>
+                <td>@item.Quantity</td>
+                <td>@sub.ToString("C")</td>
+            </tr>;
+        }
+    }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+            <td>@Model.Total.ToString("C")</td>
+        </tr>
+    </tfoot>
+</table>
+
+<a asp-action="History" class="btn btn-primary">View Order History</a>
+<a asp-controller="Restaurants" asp-action="Index" class="btn btn-secondary">Continue Shopping</a>
