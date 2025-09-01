@@ -1,83 +1,102 @@
 @model FoodDeliveryAna.Domain.DomainModels.ShoppingCart
-@{ ViewData["Title"] = "Checkout"; decimal total = Model.Items.Sum(i => (i.MenuItem?.Price ?? 0) * i.Quantity); var publishable = ViewBag.StripePublishableKey as string; }
+@{
+    ViewData["Title"] = "Checkout";
+    decimal total = Model.Items.Sum(i => (i.MenuItem?.Price ?? 0m) * i.Quantity);
+    var amountCents = (long)Math.Round(total * 100m, 0);
+}
+
 <h1 class="h4 fw-semibold mb-3">Checkout</h1>
 <div class="row g-4">
-  <div class="col-lg-7">
-    <div class="payment-panel p-4">
-      <h2 class="h5 mb-3">Payment</h2>
-      <form id="payment-form" asp-action="CheckoutConfirm" method="post">
-        <div id="stripe-block" class="mb-3" data-publishable="@publishable">
-          <div id="card-element" class="form-control"></div>
-          <div id="card-errors" class="text-danger small mt-2" role="alert"></div>
+    <div class="col-lg-7">
+        <div class="payment-panel p-4">
+            <h2 class="h5 mb-3">Payment</h2>
+
+            <div id="payment-element" class="mb-3"></div>
+            <div id="payment-errors" class="text-danger small mb-2"></div>
+            <button id="pay-btn" class="btn btn-primary w-100">Pay @total.ToString("C")</button>
+            <p class="text-muted small mt-2">Test mode. No real payment is processed.</p>
         </div>
-        <div id="demo-block" class="mb-3" style="display:none;">
-          <div class="mb-2">
-            <label class="form-label">Card number</label>
-            <input type="text" class="form-control" value="4242 4242 4242 4242" readonly />
-          </div>
-          <div class="row g-2">
-            <div class="col"><label class="form-label">Expiration</label><input type="text" class="form-control" value="12/34" readonly /></div>
-            <div class="col"><label class="form-label">CVC</label><input type="text" class="form-control" value="123" readonly /></div>
-          </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="order-summary p-4">
+            <h2 class="h5 mb-3">Order summary</h2>
+            <ul class="list-unstyled">
+                @foreach (var i in Model.Items)
+                {
+                    <li class="d-flex justify-content-between mb-2">
+                        <span>@i.MenuItem?.Name x @i.Quantity</span>
+                        <span>@(((i.MenuItem?.Price ?? 0m) * i.Quantity).ToString("C"))</span> @* NOTE the @ before the expression *@
+                    </li>
+                }
+            </ul>
+            <hr />
+            <div class="d-flex justify-content-between fw-semibold">
+                <span>Total</span><span>@total.ToString("C")</span>
+            </div>
         </div>
-        <button id="pay-btn" class="btn btn-primary btn-pill w-100">Pay @total.ToString("C")</button>
-      </form>
-      <p class="text-muted small mt-3">Test mode. No real payment is processed.</p>
     </div>
-  </div>
-  <div class="col-lg-5">
-    <div class="card p-3">
-      <h2 class="h6">Order summary</h2>
-      <ul class="list-unstyled">
-        @foreach (var i in Model.Items)
-        {
-          <li class="d-flex justify-content-between small my-2">
-            <span>@i.MenuItem?.Name × @i.Quantity</span>
-            <span>@((i.MenuItem?.Price ?? 0) * i.Quantity).ToString("C")</span>
-          </li>
-        }
-      </ul>
-      <hr/>
-      <div class="d-flex justify-content-between fw-semibold">
-        <span>Total</span><span>@total.ToString("C")</span>
-      </div>
-    </div>
-  </div>
 </div>
 
-@section Scripts{
-<script src="https://js.stripe.com/v3/"></script>
-<script>
-(function(){{
-  const publishable = document.getElementById('stripe-block').dataset.publishable;
-  const demo = document.getElementById('demo-block');
-  if(!publishable || publishable.length < 8){{
-    // fallback to demo UI
-    demo.style.display = 'block';
-    document.getElementById('card-element').style.display = 'none';
-    return;
-  }}
-  const stripe = Stripe(publishable);
-  const elements = stripe.elements({{locale:'auto'}});
-  const card = elements.create('card', {{ hidePostalCode: true }});
-  card.mount('#card-element');
-  card.on('change', function(event) {{
-    const displayError = document.getElementById('card-errors');
-    displayError.textContent = event.error ? event.error.message : '';
-  }});
-  const form = document.getElementById('payment-form');
-  form.addEventListener('submit', async function(e){{
-    e.preventDefault();
-    const {{paymentMethod, error}} = await stripe.createPaymentMethod({{
-      type: 'card', card: card
-    }});
-    if(error){{ document.getElementById('card-errors').textContent = error.message; return; }}
-    // Append the payment method id so server can process if implemented
-    const input = document.createElement('input');
-    input.type='hidden'; input.name='stripePaymentMethodId'; input.value=paymentMethod.id;
-    form.appendChild(input);
-    form.submit();
-  }});
-}})();
-</script>
+@section Scripts {
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        (async () => {
+          // 1) Create the PaymentIntent on the server
+          const res = await fetch('/api/payment/create-intent', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amountCents: @amountCents, currency: 'usd' })
+          });
+          if (!res.ok) {
+            document.getElementById('payment-errors').textContent = 'Failed to initialize payment.';
+            return;
+          }
+          const { clientSecret, publishableKey } = await res.json();
+
+          // 2) Mount Payment Element
+          const stripe = Stripe(publishableKey);
+          const elements = stripe.elements({ clientSecret });
+          const paymentElement = elements.create('payment');
+          paymentElement.mount('#payment-element');
+
+          // 3) Pay button
+          document.getElementById('pay-btn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            document.getElementById('payment-errors').textContent = '';
+
+            const { error } = await stripe.confirmPayment({
+              elements,
+              redirect: 'if_required' // handles 3DS with a light redirect only if needed
+            });
+
+            if (error) {
+              document.getElementById('payment-errors').textContent = error.message || 'Payment failed.';
+              return;
+            }
+
+            // 4) Retrieve intent to get its ID, then finalize order server-side
+            const { paymentIntent, error: retrieveErr } = await stripe.retrievePaymentIntent(clientSecret);
+            if (retrieveErr || !paymentIntent || paymentIntent.status !== 'succeeded') {
+              document.getElementById('payment-errors').textContent = (retrieveErr && retrieveErr.message) || 'Payment not completed.';
+              return;
+            }
+
+            const done = await fetch('/Orders/Complete', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ paymentIntentId: paymentIntent.id })
+            });
+
+            if (!done.ok) {
+              const txt = await done.text();
+              document.getElementById('payment-errors').textContent = txt || 'Could not finalize order.';
+              return;
+            }
+
+            const { orderId } = await done.json();
+            window.location = '/Orders/Success/' + orderId;
+          });
+        })();
+    </script>
 }

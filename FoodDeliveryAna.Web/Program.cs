@@ -1,10 +1,17 @@
 //using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using FoodDeliveryAna.Domain.Identity;
 using FoodDeliveryAna.Repository;
-using FoodDeliveryAna.Web.Services;        // <-- add this
+using FoodDeliveryAna.Web;
+using FoodDeliveryAna.Web.Services;
+using Microsoft.EntityFrameworkCore;
+using Stripe;
+
+// <-- add this
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+StripeConfiguration.ApiKey = builder.Configuration.GetValue<string>("Stripe:SecretKey");
 
 // Add services to the container.
 

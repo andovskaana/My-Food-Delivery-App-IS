@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 namespace FoodDeliveryAna.Web
 {
@@ -57,51 +58,51 @@ namespace FoodDeliveryAna.Web
         /// create the order upon successful payment.  Here we assume
         /// success and clear the cart.
         /// </summary>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CheckoutConfirm()
-        {
-            var userId = _userManager.GetUserId(User);
-            if (userId == null)
-            {
-                return Challenge();
-            }
-            var cart = await _cartService.GetActiveCartAsync(userId);
-            if (cart.Items == null || !cart.Items.Any())
-            {
-                return RedirectToAction("Index", "Cart");
-            }
-            // Calculate total and create order
-            decimal total = 0;
-            var order = new Order
-            {
-                Id = Guid.NewGuid(),
-                OwnerId = userId,
-                CreatedAt = DateTime.UtcNow,
-                Total = 0m
-            };
-            foreach (var cartItem in cart.Items)
-            {
-                var price = cartItem.MenuItem?.Price ?? 0m;
-                var sub = price * cartItem.Quantity;
-                total += sub;
-                var orderItem = new OrderItem
-                {
-                    Id = Guid.NewGuid(),
-                    MenuItemId = cartItem.MenuItemId,
-                    MenuItemName = cartItem.MenuItem?.Name ?? string.Empty,
-                    UnitPrice = price,
-                    Quantity = cartItem.Quantity,
-                    OrderId = order.Id
-                };
-                order.Items.Add(orderItem);
-            }
-            order.Total = total;
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-            await _cartService.ClearCartAsync(userId);
-            return RedirectToAction(nameof(Success), new { id = order.Id });
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> CheckoutConfirm()
+        //{
+        //    var userId = _userManager.GetUserId(User);
+        //    if (userId == null)
+        //    {
+        //        return Challenge();
+        //    }
+        //    var cart = await _cartService.GetActiveCartAsync(userId);
+        //    if (cart.Items == null || !cart.Items.Any())
+        //    {
+        //        return RedirectToAction("Index", "Cart");
+        //    }
+        //    // Calculate total and create order
+        //    decimal total = 0;
+        //    var order = new Order
+        //    {
+        //        Id = Guid.NewGuid(),
+        //        OwnerId = userId,
+        //        CreatedAt = DateTime.UtcNow,
+        //        Total = 0m
+        //    };
+        //    foreach (var cartItem in cart.Items)
+        //    {
+        //        var price = cartItem.MenuItem?.Price ?? 0m;
+        //        var sub = price * cartItem.Quantity;
+        //        total += sub;
+        //        var orderItem = new OrderItem
+        //        {
+        //            Id = Guid.NewGuid(),
+        //            MenuItemId = cartItem.MenuItemId,
+        //            MenuItemName = cartItem.MenuItem?.Name ?? string.Empty,
+        //            UnitPrice = price,
+        //            Quantity = cartItem.Quantity,
+        //            OrderId = order.Id
+        //        };
+        //        order.Items.Add(orderItem);
+        //    }
+        //    order.Total = total;
+        //    _context.Orders.Add(order);
+        //    await _context.SaveChangesAsync();
+        //    await _cartService.ClearCartAsync(userId);
+        //    return RedirectToAction(nameof(Success), new { id = order.Id });
+        //}
 
         /// <summary>
         /// Shows a success page after an order has been placed.  Displays order
@@ -129,6 +130,63 @@ namespace FoodDeliveryAna.Web
                 .Include(o => o.Items)
                 .ToListAsync();
             return View(orders);
+        }
+
+        public record CompleteOrderRequest(string PaymentIntentId);
+
+        [HttpPost]
+        [Route("Orders/Complete")]
+        [Authorize]
+        [IgnoreAntiforgeryToken] // TODO: swap to [ValidateAntiForgeryToken] and send the token from JS
+        public async Task<IActionResult> Complete([FromBody] CompleteOrderRequest req)
+        {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null) return Challenge();
+
+            // 1) Verify the PaymentIntent actually succeeded
+            var piService = new PaymentIntentService();
+            var pi = await piService.GetAsync(req.PaymentIntentId);
+            if (pi == null || pi.Status != "succeeded")
+                return BadRequest("Payment not successful.");
+
+            // 2) Load cart and create order (copy of your old CheckoutConfirm logic)
+            var cart = await _cartService.GetActiveCartAsync(userId);
+            if (cart.Items == null || !cart.Items.Any())
+                return BadRequest("Your cart is empty.");
+
+            decimal total = 0m;
+            var order = new Order
+            {
+                Id = Guid.NewGuid(),
+                OwnerId = userId,
+                CreatedAt = DateTime.UtcNow,
+                Total = 0m,
+                Items = new List<OrderItem>()
+            };
+
+            foreach (var cartItem in cart.Items)
+            {
+                var price = cartItem.MenuItem?.Price ?? 0m;
+                var sub = price * cartItem.Quantity;
+                total += sub;
+
+                order.Items.Add(new OrderItem
+                {
+                    Id = Guid.NewGuid(),
+                    MenuItemId = cartItem.MenuItemId,
+                    MenuItemName = cartItem.MenuItem?.Name ?? string.Empty,
+                    UnitPrice = price,
+                    Quantity = cartItem.Quantity,
+                    OrderId = order.Id
+                });
+            }
+
+            order.Total = total;
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+            await _cartService.ClearCartAsync(userId);
+
+            return Ok(new { orderId = order.Id });
         }
     }
 }
