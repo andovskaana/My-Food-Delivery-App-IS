@@ -15,14 +15,6 @@ StripeConfiguration.ApiKey = builder.Configuration.GetValue<string>("Stripe:Secr
 
 // Add services to the container.
 
-// HttpClient + Pixabay service
-builder.Services.AddHttpClient("pixabay", c =>
-{
-    c.BaseAddress = new Uri("https://pixabay.com/api/");
-});
-builder.Services.AddSingleton<PixabayService>();   // <-- DI for our image service
-
-builder.Services.AddMemoryCache();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");

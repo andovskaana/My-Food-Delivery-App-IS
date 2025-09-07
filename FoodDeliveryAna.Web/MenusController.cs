@@ -14,12 +14,10 @@ namespace FoodDeliveryAna.Web
     public class MenusController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly PixabayService _pixabay;
 
         public MenusController(ApplicationDbContext _context, PixabayService pixabay)
         {
             this._context = _context;
-            _pixabay = pixabay;
         }
 
         // GET: Menus
@@ -62,14 +60,6 @@ namespace FoodDeliveryAna.Web
             }
 
             var items = await qy.ToListAsync();
-
-            // Fetch images concurrently (and cached). Use the faster "small" variant.
-            var imageTasks = items.Select(async it =>
-            {
-                if (string.IsNullOrWhiteSpace(it.ImageUrl))
-                    it.ImageUrl = await _pixabay.GetImageUrlAsync(it.Name, small: true);
-            });
-            await Task.WhenAll(imageTasks);
 
             return View(items);
         }

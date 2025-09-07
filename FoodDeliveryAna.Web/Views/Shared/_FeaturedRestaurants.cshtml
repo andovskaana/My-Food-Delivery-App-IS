@@ -1,6 +1,6 @@
-﻿﻿@using FoodDeliveryAna.Domain.DomainModels
+﻿@using FoodDeliveryAna.Domain.DomainModels
 @inject FoodDeliveryAna.Repository.ApplicationDbContext Db
-@inject FoodDeliveryAna.Web.Services.PixabayService Pix
+
 @{
     var items = Db.Restaurants.Take(6).ToList();
 }
@@ -8,13 +8,11 @@
     @foreach (var r in items)
     {
         var address = string.Join(", ", new[] { r.StreetAddress, r.City }.Where(x => !string.IsNullOrWhiteSpace(x)));
-        var img = await Pix.GetRestaurantImageUrlAsync(r.Name, small: true);
+        var img = string.IsNullOrWhiteSpace(r.ImageUrl) ? "/images/placeholder-restaurant.jpg" : r.ImageUrl;
+
         <div class="col-12 col-sm-6 col-lg-4">
             <div class="card h-100">
-                <img class="card-img-top"
-                     src="@(await Pix.GetImageUrlAsync($"{r.Name} restaurant", small: true))"
-                     alt="@r.Name"
-                     loading="lazy" />
+                <img class="card-img-top" src="@img" alt="@r.Name" loading="lazy" />
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">@r.Name</h5>
                     <p class="card-text text-muted">@address</p>

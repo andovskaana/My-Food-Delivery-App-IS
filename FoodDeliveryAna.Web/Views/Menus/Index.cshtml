@@ -26,10 +26,7 @@
 <div class="row g-4">
     @foreach (var m in Model)
     {
-        var img = string.IsNullOrWhiteSpace(m.ImageUrl)
-        ? "https://source.unsplash.com/640x360/?food"
-        : m.ImageUrl;
-
+        var img = string.IsNullOrWhiteSpace(m.ImageUrl) ? "/images/placeholder-food.jpg" : m.ImageUrl;
         var restaurant = m.Menu?.Restaurant?.Name ?? m.Menu?.Title ?? "Restaurant";
         <div class="col-12 col-sm-6 col-lg-4">
             <div class="card h-100">
