@@ -1,0 +1,27 @@
+﻿@model IEnumerable<FoodDeliveryAna.Domain.DomainModels.RestaurantStatusDTO>
+
+<h2>Restaurants — Open status now</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Restaurant</th>
+            <th>Status</th>
+            <th>Today</th>
+            <th>Rating</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            var tag = r.IsOpen ? "Open" : "Closed";
+            var css = r.IsOpen ? "badge bg-success" : "badge bg-secondary";
+            <tr>
+                <td>@r.RestaurantName</td>
+                <td><span class="@css">@tag</span></td>
+                <td>@(string.IsNullOrWhiteSpace(r.TodayRange) ? "closed" : r.TodayRange)</td>
+                <td>@(r.Rating.HasValue? r.Rating.Value.ToString("0.0") : "-")</td>
+            </tr>
+        }
+    </tbody>
+</table>

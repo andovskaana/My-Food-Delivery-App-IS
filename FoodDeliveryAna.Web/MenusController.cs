@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FoodDeliveryAna.Domain.DomainModels;
 using FoodDeliveryAna.Repository;
-using FoodDeliveryAna.Web.Services;
 
 namespace FoodDeliveryAna.Web
 {
@@ -15,7 +14,7 @@ namespace FoodDeliveryAna.Web
     {
         private readonly ApplicationDbContext _context;
 
-        public MenusController(ApplicationDbContext _context, PixabayService pixabay)
+        public MenusController(ApplicationDbContext _context)
         {
             this._context = _context;
         }

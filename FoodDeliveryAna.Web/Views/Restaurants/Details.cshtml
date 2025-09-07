@@ -1,53 +1,104 @@
-﻿@model FoodDeliveryAna.Domain.DomainModels.Restaurant
+﻿@using System
+@using System.Linq
+@using FoodDeliveryAna.Service
+@model FoodDeliveryAna.Domain.DomainModels.Restaurant
+@inject IRestaurantOpenStatusService StatusService
 
 @{
     ViewData["Title"] = "Details";
+
+    // Pull live status from API and match by name (case-insensitive)
+    var statuses = await StatusService.GetStatusesAsync();
+    var st = statuses.FirstOrDefault(s =>
+        string.Equals(s.RestaurantName, Model.Name, StringComparison.OrdinalIgnoreCase));
+
+    var isOpen = st?.IsOpen == true;
+    var badgeCss = isOpen ? "badge bg-success" : "badge bg-secondary";
+    var badgeText = isOpen ? "Open" : "Closed";
+
+    // Rating: prefer API, fall back to model
+    var modelRatingText = (Model?.Rating != null)
+        ? Convert.ToDouble(Model.Rating).ToString("0.0")
+        : "-";
+    var ratingText = (st?.Rating is double rt)
+        ? rt.ToString("0.0")
+        : modelRatingText;
+
+    // Today's hours: prefer API's TodayRange, fall back to model.OpeningHours (if any)
+    var todayRangeText = (st != null && !string.IsNullOrWhiteSpace(st.TodayRange))
+        ? st.TodayRange!
+        : (string.IsNullOrWhiteSpace(Model?.OpeningHours) ? "closed" : Model.OpeningHours);
+
+    // Day name in Europe/Skopje (with Windows fallback)
+    TimeZoneInfo tzi;
+    try { tzi = TimeZoneInfo.FindSystemTimeZoneById("Europe/Skopje"); }
+    catch { tzi = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"); }
+    var nowLocal = TimeZoneInfo.ConvertTime(DateTime.UtcNow, tzi);
+    var dayName = nowLocal.ToString("dddd");
 }
 
 <h1>Details</h1>
 
-<div>
-    <h4>Restaurant</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.City)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.City)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StreetAddress)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StreetAddress)
-        </dd>
-        <dt class="col-sm-2">
-            Opening Hours
-        </dt>
-        <dd class="col-sm-10">
-            @Model.OpeningHours
-        </dd>
-        <dt class="col-sm-2">
-            Rating
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Rating
-        </dd>
-    </dl>
+<div class="mb-3">
+    <h4 class="d-flex align-items-center gap-3 mb-0">
+        Restaurant
+        @if (st != null)
+        {
+            <span class="@badgeCss">@badgeText</span>
+        }
+    </h4>
+    @* show rating and today's hours under the header *@
+    <div class="mt-2">
+        <span class="me-3"><strong>Rating:</strong> @ratingText</span>
+        <span><strong>Opening Hours (today – @dayName):</strong> @todayRangeText</span>
+    </div>
 </div>
+
+<hr />
+<dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Name)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Name)
+    </dd>
+
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Description)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Description)
+    </dd>
+
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.City)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.City)
+    </dd>
+
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.StreetAddress)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.StreetAddress)
+    </dd>
+
+    <dt class="col-sm-2">
+        Opening Hours
+    </dt>
+    <dd class="col-sm-10">
+        @todayRangeText
+    </dd>
+
+    <dt class="col-sm-2">
+        Rating
+    </dt>
+    <dd class="col-sm-10">
+        @ratingText
+    </dd>
+</dl>
+
 <hr />
 @* Display menus and their items *@
 <h4>Menus</h4>

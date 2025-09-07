@@ -2,7 +2,7 @@
 using FoodDeliveryAna.Domain.Identity;
 using FoodDeliveryAna.Repository;
 using FoodDeliveryAna.Web;
-using FoodDeliveryAna.Web.Services;
+using FoodDeliveryAna.Service;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
 
@@ -29,6 +29,8 @@ builder.Services.AddDefaultIdentity<FoodDeliveryApplicationUser>(options =>
 }).AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpClient<IRestaurantOpenStatusService, RestaurantOpenStatusService>();
 
 // Register application services
 builder.Services.AddScoped<FoodDeliveryAna.Service.ShoppingCartService>();
