@@ -4,48 +4,200 @@
     ViewData["Title"] = "Order Successful";
 }
 
-<h2>Thank you for your order!</h2>
+<style>
+    :root {
+        --brand-start: #7b5cff;
+        --brand-end: #6a4cff;
+        --brand: #6f4cff;
+        --ink: #1f2328;
+        --muted: #6b7280;
+        --surface: #ffffff;
+        --surface-2: #f6f7fb;
+        --ring: rgba(111,76,255,.35);
+    }
 
-<p>Your order has been placed successfully. Below is your order summary.</p>
+    .success-hero {
+        background: linear-gradient(135deg, var(--brand-start), var(--brand-end));
+        color: #fff;
+        border-radius: 1.25rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        box-shadow: 0 8px 20px rgba(0,0,0,.12);
+    }
 
-<div class="mb-3">
-    <strong>Order ID:</strong> @Model.Id
-</div>
-<div class="mb-3">
-    <strong>Date:</strong> @Model.CreatedAt.ToLocalTime().ToString("dd MMM yyyy HH:mm")
-</div>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Item</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Subtotal</th>
-        </tr>
-    </thead>
-    <tbody>
-    @{
-        decimal total = 0;
-        foreach (var item in Model.Items)
-        {
-            var sub = item.UnitPrice * item.Quantity;
-            total += sub;
-            <tr>
-                <td>@item.MenuItemName</td>
-                <td>@item.UnitPrice.ToString("C")</td>
-                <td>@item.Quantity</td>
-                <td>@sub.ToString("C")</td>
-            </tr>;
+        .success-hero h2 {
+            margin: 0 0 .5rem 0;
+            font-weight: 700;
+        }
+
+        .success-hero p {
+            margin: 0;
+            opacity: .9;
+        }
+
+    .order-card {
+        background: var(--surface);
+        border: 1px solid rgba(0,0,0,.06);
+        border-radius: 1rem;
+        box-shadow: 0 6px 18px rgba(0,0,0,.06);
+        padding: 1.25rem;
+    }
+
+    .meta {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: .5rem .75rem;
+        margin-bottom: 1rem;
+    }
+
+    @@media (min-width: 576px) {
+        .meta {
+            grid-template-columns: repeat(2, 1fr);
         }
     }
-    </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="3" class="text-end"><strong>Total:</strong></td>
-            <td>@Model.Total.ToString("C")</td>
-        </tr>
-    </tfoot>
-</table>
 
-<a asp-action="History" class="btn btn-primary">View Order History</a>
-<a asp-controller="Restaurants" asp-action="Index" class="btn btn-secondary">Continue Shopping</a>
+    .meta .meta-row {
+        background: var(--surface-2);
+        border: 1px solid rgba(0,0,0,.05);
+        border-radius: .5rem;
+        padding: .5rem .75rem;
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+    }
+
+    .meta .label {
+        color: var(--muted);
+        font-weight: 600;
+        min-width: 88px;
+    }
+
+    .table-modern {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 0;
+    }
+
+        .table-modern thead th {
+            background: var(--surface-2);
+            color: var(--muted);
+            font-weight: 600;
+            letter-spacing: .01em;
+            padding: .75rem 1rem;
+            border-bottom: 1px solid rgba(0,0,0,.06);
+        }
+
+        .table-modern tbody td {
+            padding: .85rem 1rem;
+            border-top: 1px solid rgba(0,0,0,.06);
+            vertical-align: middle;
+        }
+
+        .table-modern tfoot td {
+            padding: .85rem 1rem;
+            border-top: 2px solid rgba(0,0,0,.08);
+            font-weight: 700;
+        }
+
+    .btn-brand {
+        background: var(--brand);
+        color: #fff;
+        border: none;
+        padding: .55rem 1.1rem;
+        border-radius: .75rem;
+        font-weight: 600;
+        box-shadow: 0 8px 18px var(--ring);
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-brand:hover {
+            filter: brightness(.97);
+            color: #fff;
+        }
+
+    .btn-outline {
+        border: 1px solid var(--brand);
+        color: var(--brand);
+        padding: .55rem 1.1rem;
+        border-radius: .75rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-outline:hover {
+            background: var(--brand);
+            color: #fff;
+        }
+
+    .actions {
+        margin-top: 1rem;
+        display: flex;
+        gap: .75rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+</style>
+
+<div class="success-hero">
+    <h2>Thank you for your order</h2>
+    <p>Your order has been placed successfully. Below is your order summary.</p>
+</div>
+
+<div class="order-card">
+    <div class="meta">
+        @* <div class="meta-row">
+            <div class="label">Order ID</div>
+            <div>@Model.Id</div>
+        </div> *@
+        <div class="meta-row">
+            <div class="label">Date</div>
+            <div>@Model.CreatedAt.ToLocalTime().ToString("dd MMM yyyy HH:mm")</div>
+        </div>
+    </div>
+
+    <table class="table-modern">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th class="text-end">Price</th>
+                <th class="text-end">Quantity</th>
+                <th class="text-end">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                decimal total = 0;
+                foreach (var item in Model.Items)
+                {
+                    var sub = item.UnitPrice * item.Quantity;
+                    total += sub;
+                }
+            }
+            @foreach (var item in Model.Items)
+            {
+                var sub = item.UnitPrice * item.Quantity;
+                <tr>
+                    <td>@item.MenuItemName</td>
+                    <td class="text-end">@item.UnitPrice.ToString("C")</td>
+                    <td class="text-end">@item.Quantity</td>
+                    <td class="text-end">@sub.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-end">Total</td>
+                <td class="text-end">@Model.Total.ToString("C")</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="actions">
+        <a asp-action="History" class="btn-brand">View Order History</a>
+        <a asp-controller="Restaurants" asp-action="Index" class="btn-outline">Continue Shopping</a>
+    </div>
+</div>
