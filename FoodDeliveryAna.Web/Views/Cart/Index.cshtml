@@ -1,63 +1,144 @@
+@using System.Linq
 @model FoodDeliveryAna.Domain.DomainModels.ShoppingCart
-@{ ViewData["Title"] = "Your cart"; decimal total = Model.Items.Sum(i => (i.MenuItem?.Price ?? 0) * i.Quantity); }
-<h1 class="h4 fw-semibold mb-3">Your cart</h1>
 
-@if (!Model.Items.Any())
+@{
+    ViewData["Title"] = "Your cart";
+    decimal Subtotal() => Model?.Items?.Sum(i => (i.MenuItem?.Price ?? 0m) * i.Quantity) ?? 0m;
+}
+
+<h1 class="h4 fw-semibold mb-4">Your cart</h1>
+
+@if (Model?.Items == null || !Model.Items.Any())
 {
-  <div class="text-center py-5">
-    <p class="text-muted mb-3">Your basket is empty.</p>
-    <a asp-controller="Restaurants" asp-action="Index" class="btn btn-primary btn-pill">Find something tasty</a>
-  </div>
+    <div class="alert alert-info">Your cart is empty.</div>
 }
 else
 {
-  <div class="row g-4">
-    <div class="col-lg-8">
-      <table class="table align-middle">
-        <thead>
-          <tr><th>Item</th><th style="width:140px">Qty</th><th class="text-end">Price</th><th></th></tr>
-        </thead>
-        <tbody>
-        @foreach (var i in Model.Items)
-        {
-          <tr>
-            <td>
-              <div class="d-flex align-items-center gap-3">
-                <img src="https://picsum.photos/seed/@i.MenuItem?.Name/80/80" alt="" class="rounded" width="64" height="64" />
-                <div>
-                  <div class="fw-semibold">@i.MenuItem?.Name</div>
-                  </div>
-              </div>
-            </td>
-            <td>
-              <form asp-action="UpdateQuantity" method="post" class="d-flex align-items-center gap-2">
-                <input type="hidden" name="cartItemId" value="@i.Id" />
-                <input name="quantity" type="number" class="form-control" value="@i.Quantity" min="1" style="width:90px" />
-                <button class="btn btn-outline-secondary btn-sm">Update</button>
-              </form>
-            </td>
-            <td class="text-end">@((i.MenuItem?.Price ?? 0) * i.Quantity).ToString("C")</td>
-            <td class="text-end">
-              <form asp-action="Remove" method="post">
-                <input type="hidden" name="cartItemId" value="@i.Id" />
-                <button class="btn btn-link text-danger">Remove</button>
-              </form>
-            </td>
-          </tr>
-        }
-        </tbody>
-      </table>
-    </div>
-    <div class="col-lg-4">
-      <div class="card p-3">
-        <div class="d-flex justify-content-between">
-          <span class="fw-semibold">Subtotal</span>
-          <span>@total.ToString("C")</span>
+    <div class="row g-4">
+        <div class="col-12 col-lg-8">
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead class="small text-muted">
+                        <tr>
+                            <th style="width: 56px;"></th>
+                            <th>Item</th>
+                            <th style="width: 120px;">Qty</th>
+                            <th style="width: 140px;">Price</th>
+                            <th style="width: 100px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var it in Model.Items)
+                        {
+                            var itemId = it.Id;
+                            var name = it.MenuItem?.Name ?? "Item";
+                            var img = string.IsNullOrWhiteSpace(it.MenuItem?.ImageUrl) ? "/images/placeholder-food.jpg" : it.MenuItem.ImageUrl;
+                            var qty = it.Quantity;
+                            var unit = it.MenuItem?.Price ?? 0m;
+                            var total = unit * qty;
+
+                            <tr data-row-item-id="@itemId">
+                                <td>
+                                    <img src="@img" alt="" class="rounded" style="width:56px;height:56px;object-fit:cover;" />
+                                </td>
+                                <td>
+                                    <div class="fw-semibold">@name</div>
+                                </td>
+                                <td>
+                                    <input type="number"
+                                           class="form-control form-control-sm cart-qty"
+                                           value="@qty"
+                                           min="1"
+                                           step="1"
+                                           data-cart-item-id="@itemId" />
+                                </td>
+                                <td class="item-total fw-semibold" data-unit="@unit">@total.ToString("C")</td>
+                                <td>
+                                    <form asp-controller="Cart" asp-action="Remove" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="cartItemId" value="@itemId" />
+                                        <button type="submit" class="btn btn-link link-danger p-0">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <hr/>
-        <a asp-controller="Orders" asp-action="Checkout" class="btn btn-primary w-100 btn-pill">Checkout</a>
-        <a asp-controller="Restaurants" asp-action="Index" class="btn btn-outline-dark w-100 mt-2 btn-pill">Continue shopping</a>
-      </div>
+
+        <div class="col-12 col-lg-4">
+            <div class="p-3 p-md-4 rounded-4 bg-white shadow-sm">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="fw-semibold">Subtotal</div>
+                    <div id="cartSubtotal" class="fw-bold">@Subtotal().ToString("C")</div>
+                </div>
+                <form asp-controller="Orders" asp-action="Checkout" method="post" class="d-grid gap-2">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill">Checkout</button>
+                    <a asp-controller="Restaurants" asp-action="Index" class="btn btn-outline-secondary rounded-pill">Continue shopping</a>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <!-- antiforgery for AJAX -->
+    <form id="cartAjaxTokenForm">@Html.AntiForgeryToken()</form>
+}
+
+@section Scripts {
+    <script>
+        (() => {
+          const token = document.querySelector('#cartAjaxTokenForm input[name="__RequestVerificationToken"]')?.value || '';
+          const subtotalEl = document.getElementById('cartSubtotal');
+
+          function debounce(fn, wait) { let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), wait); }; }
+
+          async function postUpdate(cartItemId, quantity) {
+            const fd = new FormData();
+            fd.append('cartItemId', cartItemId);
+            fd.append('quantity', quantity);
+            fd.append('__RequestVerificationToken', token);
+
+            const res = await fetch('@Url.Action("UpdateQuantity", "Cart")', { method: 'POST', body: fd, credentials: 'same-origin' });
+            if (!res.ok) return;
+            const data = await res.json();
+            if (data?.ok) {
+              const row = document.querySelector(`[data-row-item-id="${cartItemId}"]`);
+              if (row) {
+                const totalCell = row.querySelector('.item-total');
+                if (totalCell) totalCell.textContent = data.itemTotal;
+              }
+              if (subtotalEl) subtotalEl.textContent = data.subtotal;
+            }
+          }
+
+          const debouncedUpdate = debounce(postUpdate, 350);
+
+          document.querySelectorAll('.cart-qty').forEach(input => {
+            const id = input.getAttribute('data-cart-item-id');
+
+            // Spinner arrows or blur -> change fires
+            input.addEventListener('change', () => {
+              let q = parseInt(input.value || '1', 10); if (!Number.isFinite(q) || q < 1) q = 1; input.value = q;
+              postUpdate(id, q);
+            });
+
+            // Enter key -> immediate
+            input.addEventListener('keydown', e => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                let q = parseInt(input.value || '1', 10); if (!Number.isFinite(q) || q < 1) q = 1; input.value = q;
+                postUpdate(id, q);
+              }
+            });
+
+            // While typing -> debounced
+            input.addEventListener('input', () => {
+              let q = parseInt(input.value || '1', 10); if (!Number.isFinite(q) || q < 1) q = 1;
+              debouncedUpdate(id, q);
+            });
+          });
+        })();
+    </script>
 }
