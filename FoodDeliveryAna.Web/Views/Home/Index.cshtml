@@ -1,32 +1,236 @@
-﻿﻿@{
-ViewData["Title"] = "Home";
+﻿@{
+    ViewData["Title"] = "Home";
 }
-<section class="hero rounded-3 p-4 p-md-5 mb-4 text-white position-relative overflow-hidden">
-    <div class="hero-bg"></div>
-    <div class="position-relative" style="z-index:2">
-        <h1 class="display-6 fw-bold mb-2">Food, fast.</h1>
-        <p class="lead mb-4">Order from the best restaurants around you. Fresh meals delivered to your door.</p>
-        <div class="d-flex gap-2">
-            <a class="btn btn-primary btn-lg btn-pill" asp-controller="Restaurants" asp-action="Index">Browse restaurants</a>
-            <a class="btn btn-outline-light btn-lg btn-pill" asp-controller="Menus" asp-action="Index">See all dishes</a>
+
+<!-- ======= HERO ======= -->
+<section class="hero-wrapper mb-4">
+    <div class="hero-split rounded-4 overflow-hidden shadow-sm">
+        <div class="row g-0 align-items-stretch">
+            <!-- Left: text + search -->
+            <div class="col-12 col-lg-6 p-4 p-md-5 bg-hero-left text-dark d-flex flex-column justify-content-center">
+                <p class="text-muted mb-2">Order restaurant food, takeaway and groceries.</p>
+                <h1 class="display-6 fw-bold lh-sm mb-3">
+                    Feast Your Senses,<br />
+                    <span class="text-accent">Fast and Fresh</span>
+                </h1>
+
+                <!-- Search -->
+                <form id="heroSearchForm" class="hero-search d-flex align-items-stretch rounded-pill overflow-hidden shadow-sm" method="get" asp-controller="Restaurants" asp-action="Index">
+                    <input id="restaurantSearchInput" name="search" type="text" class="form-control border-0 px-3" placeholder="Search restaurants..." />
+                    <button id="restaurantSearchBtn" type="submit" class="btn btn-search px-4 fw-semibold">Search</button>
+                </form>
+            </div>
+
+            <!-- Right: image -->
+            <div class="col-12 col-lg-6 bg-hero-right position-relative">
+                <!-- Use your image here -->
+                <div class="hero-image h-100" style="background-image:url('/images/Gemini_Is_Banner.png');"></div>
+
+                <!-- Optional: little “notification” bubbles like in your example
+                <div class="notif notif-1">Order<br /><small>We’ve received your order!</small></div>
+                <div class="notif notif-2">Order Accepted<br /><small>Your order will be delivered shortly</small></div>
+                <div class="notif notif-3">Courrier nearby<br /><small>They’re almost there!</small></div>
+                -->
+            </div>
         </div>
     </div>
 </section>
 
-<section class="mb-4">
-    <h2 class="h5 fw-semibold mb-3">Popular categories</h2>
-    <div class="row g-2">
-        <div class="col-6 col-md-3"><a class="category-tile" asp-controller="Menus" asp-action="Index" asp-route-category="pizza">🍕 Pizza</a></div>
-        <div class="col-6 col-md-3"><a class="category-tile" asp-controller="Menus" asp-action="Index" asp-route-category="burgers">🍔 Burgers</a></div>
-        <div class="col-6 col-md-3"><a class="category-tile" asp-controller="Menus" asp-action="Index" asp-route-category="sushi">🍣 Sushi</a></div>
-        <div class="col-6 col-md-3"><a class="category-tile" asp-controller="Menus" asp-action="Index" asp-route-category="dessert">🍰 Desserts</a></div>
-    </div>
-</section>
-
+<!-- ======= FEATURED ======= -->
 <section>
     <div class="d-flex justify-content-between align-items-center mb-2">
         <h2 class="h5 fw-semibold mb-0">Featured restaurants</h2>
         <a class="small text-decoration-none" asp-controller="Restaurants" asp-action="Index">View all</a>
     </div>
-    @await Html.PartialAsync("~/Views/Shared/_FeaturedRestaurants.cshtml")
+
+    <div id="featuredRestaurantsGrid" class="row g-4">
+        @await Html.PartialAsync("~/Views/Shared/_FeaturedRestaurants.cshtml")
+    </div>
 </section>
+
+<style>
+    /* Layout + colors */
+    .hero-split {
+        background: #eef1f7;
+    }
+
+    .bg-hero-left {
+        background: #eef1f7;
+    }
+
+    .bg-hero-right {
+        background: #fff;
+    }
+
+    .text-accent {
+        color: #7931A3;
+    }
+    /* deep red accent like your sample */
+
+    /* Hero image panel */
+    .hero-image {
+        border-left: 0; /* we already have rounded outer wrapper */
+        background-size: cover;
+        background-position: center;
+        min-height: 260px;
+    }
+
+    /* Search styling (pill) */
+    .hero-search {
+        background: #fff;
+        max-width: 520px;
+    }
+
+        .hero-search input {
+            height: 48px;
+        }
+
+    .btn-search {
+        background: #7c3aed; /* deep red button */
+        color: #fff;
+        border-radius: 0; /* already inside pill */
+    }
+
+        .btn-search:hover {
+            filter: brightness(1.05);
+        }
+
+    /* Smaller screens */
+    @@media (max-width: 991.98px) {
+        .hero-image
+
+    {
+        min-height: 240px;
+        border-top: 1px solid rgba(0,0,0,.06);
+    }
+
+    }
+    @@media (max-width: 576px) {
+        .display-6
+
+    {
+        font-size: 1.8rem;
+    }
+
+    .hero-search {
+        max-width: 100%;
+    }
+
+    .hero-image {
+        min-height: 180px;
+    }
+
+    }
+
+    /* OPTIONAL: floating notifications mock (disabled by default) */
+    .notif {
+        position: absolute;
+        right: 1rem;
+        left: auto;
+        background: #fff;
+        color: #333;
+        border-radius: .75rem;
+        box-shadow: 0 8px 24px rgba(0,0,0,.08);
+        padding: .5rem .75rem;
+        font-size: .85rem;
+    }
+
+        .notif small {
+            color: #6c757d;
+        }
+
+    .notif-1 {
+        top: 8%;
+    }
+
+    .notif-2 {
+        top: 38%;
+    }
+
+    .notif-3 {
+        top: 68%;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        // Robust client-side filter + server fallback
+        (function () {
+          const form  = document.getElementById('heroSearchForm');
+          const input = document.getElementById('restaurantSearchInput');
+          const grid  = document.getElementById('featuredRestaurantsGrid');
+
+          // Collect cards with several heuristics to support different partials
+          function getCards() {
+            if (!grid) return [];
+            // Prefer explicit restaurant-card; else anything with data-cats; else cards
+            const set = new Set();
+            grid.querySelectorAll('.restaurant-card, [data-cats], .card').forEach(el => set.add(el));
+            return Array.from(set);
+          }
+
+          function getName(el) {
+            // Prefer data attribute, then .restaurant-name, then .card-title
+            const dsName = el.getAttribute('data-name') || el.dataset?.name || '';
+            if (dsName) return dsName;
+            const rn = el.querySelector('.restaurant-name');
+            if (rn && rn.textContent) return rn.textContent;
+            const ct = el.querySelector('.card-title');
+            if (ct && ct.textContent) return ct.textContent;
+            return (el.textContent || '');
+          }
+
+          function getCats(el) {
+            return el.getAttribute('data-cats') || '';
+          }
+
+          function toggle(el, show) {
+            const col = el.closest('[class*="col-"]');
+            (col || el).classList.toggle('d-none', !show);
+          }
+
+          function clientFilter(query) {
+            const q = (query || '').trim().toLowerCase();
+            const cards = getCards();
+            if (!cards.length) return false; // nothing to filter on this page
+            let anyShown = false;
+            cards.forEach(card => {
+              const name = getName(card).toLowerCase();
+              const cats = getCats(card).toLowerCase();
+              const show = !q || name.includes(q) || cats.includes(q);
+              toggle(card, show);
+              if (show) anyShown = true;
+            });
+            return true; // filtering attempted
+          }
+
+          function goServer(query) {
+            const url = new URL(window.location.origin + '/Restaurants');
+            if (query) url.searchParams.set('search', query);
+            window.location.href = url.toString();
+          }
+
+          // Submit handler: try client filter; if grid absent, do server search.
+          form.addEventListener('submit', function (e) {
+            const query = input.value || '';
+            const didClient = clientFilter(query);
+            if (didClient) {
+              e.preventDefault(); // don’t navigate; we filtered locally
+              // Optionally scroll to featured grid
+              if (grid) {
+                const top = grid.getBoundingClientRect().top + window.pageYOffset - 80;
+                window.scrollTo({ top, behavior: 'smooth' });
+              }
+            } else {
+              // No grid to filter – go server-side
+              // (don’t preventDefault)
+            }
+          });
+
+          // Press Enter in input = submit
+          input.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') form.requestSubmit();
+          });
+        })();
+    </script>
+}

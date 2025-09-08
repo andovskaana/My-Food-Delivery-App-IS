@@ -35,111 +35,398 @@
     catch { tzi = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time"); }
     var nowLocal = TimeZoneInfo.ConvertTime(DateTime.UtcNow, tzi);
     var dayName = nowLocal.ToString("dddd");
+
+    // Hero image
+    var bannerUrl = string.IsNullOrWhiteSpace(Model?.ImageUrl) ? "/images/placeholder-banner.jpg" : Model.ImageUrl;
 }
 
-<h1>Details</h1>
+@* <h1>Details</h1> *@
 
-<div class="mb-3">
-    <h4 class="d-flex align-items-center gap-3 mb-0">
-        Restaurant
-        @if (st != null)
-        {
-            <span class="@badgeCss">@badgeText</span>
-        }
-    </h4>
-    @* show rating and today's hours under the header *@
-    <div class="mt-2">
-        <span class="me-3"><strong>Rating:</strong> @ratingText</span>
-        <span><strong>Opening Hours (today – @dayName):</strong> @todayRangeText</span>
+@* ---------- Korpa-style HERO (background image with overlayed details) ---------- *@
+<div class="restaurant-hero" style="background-image: url('@bannerUrl');">
+    <div class="restaurant-hero-overlay">
+        <h2 class="restaurant-name mb-2">@Model?.Name</h2>
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+            <span class="status-badge @badgeCss">@badgeText</span>
+            <span class="hero-chip"><strong>Rating:</strong> @ratingText</span>
+            <span class="hero-chip"><strong>Opening Hours (today – @dayName):</strong> @todayRangeText</span>
+        </div>
     </div>
 </div>
 
-<hr />
-<dl class="row">
-    <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.Name)
-    </dt>
-    <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.Name)
-    </dd>
+@functions {
+    string Slugify(string s) =>
+        string.IsNullOrWhiteSpace(s) ? "" :
+        new string(s.Trim().ToLowerInvariant()
+            .Select(ch => char.IsLetterOrDigit(ch) ? ch : '-').ToArray())
+        .Replace("--", "-");
+}
 
-    <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.Description)
-    </dt>
-    <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.Description)
-    </dd>
-
-    <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.City)
-    </dt>
-    <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.City)
-    </dd>
-
-    <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.StreetAddress)
-    </dt>
-    <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.StreetAddress)
-    </dd>
-
-    <dt class="col-sm-2">
-        Opening Hours
-    </dt>
-    <dd class="col-sm-10">
-        @todayRangeText
-    </dd>
-
-    <dt class="col-sm-2">
-        Rating
-    </dt>
-    <dd class="col-sm-10">
-        @ratingText
-    </dd>
-</dl>
-
-<hr />
-@* Display menus and their items *@
-<h4>Menus</h4>
-@if (Model.Menus != null && Model.Menus.Any())
+@if (Model.Menus != null && Model.Menus.Count > 0)
 {
-    foreach (var menu in Model.Menus)
-    {
-        <h5>@menu.Title</h5>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in menu.Items)
+    <div class="menu-cats mb-3">
+        <div class="container-fluid px-0 d-flex align-items-center gap-2 flex-wrap">
+            <div class="d-flex gap-2 flex-nowrap overflow-auto">
+                <a class="btn btn-sm btn-outline-secondary px-3 py-2"
+                   href="#all" data-filter="all">All</a>
+
+                @foreach (var m in Model.Menus)
                 {
-                    <tr>
-                        <td>@item.Name</td>
-                        <td>@item.Price.ToString("C")</td>
-                        <td>
-                            <form asp-controller="Cart" asp-action="Add" method="post">
-                                <input type="hidden" name="menuItemId" value="@item.Id" />
-                                <input type="number" name="quantity" value="1" min="1" class="form-control d-inline w-auto" style="width: 70px;" />
-                                <button type="submit" class="btn btn-sm btn-primary">Add to cart</button>
-                            </form>
-                        </td>
-                    </tr>
+                    var id = Slugify(m.Title);
+                    <a class="btn btn-sm btn-outline-secondary px-3 py-2"
+                       href="#@id" data-filter="@id">@m.Title</a>
                 }
-            </tbody>
-        </table>
+            </div>
+
+            <button type="button"
+                    id="filterToggle"
+                    class="btn btn-sm btn-outline-secondary ms-auto">
+                Filter: Off
+            </button>
+        </div>
+    </div>
+}
+
+<hr />
+<h4>Menu</h4>
+
+<style>
+    /* ===== Hero (background header) ===== */
+    .restaurant-hero {
+        position: relative;
+        width: 100%;
+        height: 300px; /* adjust as you like */
+        background-size: cover;
+        background-position: center;
+        border-radius: 0 0 1rem 1rem; /* soft rounded bottom */
+        overflow: hidden;
+        margin-bottom: 1rem;
     }
-}
-else
-{
-    <p>No menus available for this restaurant.</p>
-}
+
+        .restaurant-hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient( to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,.35) 40%, rgba(0,0,0,.00) 100% );
+            z-index: 1;
+        }
+
+    .restaurant-hero-overlay {
+        position: absolute;
+        z-index: 2;
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        color: #fff;
+        text-shadow: 0 2px 4px rgba(0,0,0,.4);
+    }
+
+    .restaurant-name {
+        font-size: 2rem;
+        font-weight: 800;
+        letter-spacing: .3px;
+    }
+
+    .status-badge {
+        padding: .35rem .75rem;
+        border-radius: .5rem;
+        font-weight: 600;
+        color: #fff; /* ensure contrast on non-bg-* badges too */
+    }
+
+    .hero-chip {
+        padding: .25rem .5rem;
+        background: rgba(0,0,0,.35);
+        border: 1px solid rgba(255,255,255,.25);
+        border-radius: .5rem;
+        backdrop-filter: blur(2px);
+    }
+
+    @@media (max-width: 576px) {
+        .restaurant-hero {
+            height: 220px;
+            border-radius: 0 0 .75rem .75rem;
+        }
+
+        .restaurant-name {
+            font-size: 1.5rem;
+        }
+    }
+
+    /* ===== Menus ===== */
+    .menu-wrap {
+        max-width: 820px;
+        margin: 0 auto;
+    }
+
+    .menu-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .menu-table {
+        table-layout: fixed;
+        width: 100%;
+        margin-bottom: .5rem;
+    }
+
+        .menu-table th, .menu-table td {
+            vertical-align: middle;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+            .menu-table th:nth-child(1), .menu-table td:nth-child(1) {
+                width: 88px;
+            }
+            /* Photo */
+            .menu-table th:nth-child(2), .menu-table td:nth-child(2) {
+                width: 45%;
+            }
+            /* Name */
+            .menu-table th:nth-child(3), .menu-table td:nth-child(3) {
+                width: 15%;
+            }
+            /* Price */
+            .menu-table th:nth-child(4), .menu-table td:nth-child(4) {
+                width: 25%;
+            }
+    /* Qty+Add */
+
+    .menu-thumb {
+        width: 72px;
+        height: 72px;
+        object-fit: cover;
+        border-radius: .5rem;
+        border: 1px solid rgba(0,0,0,.08);
+        background: #f8f9fa;
+    }
+
+        .menu-thumb.placeholder {
+            display: inline-grid;
+            place-items: center;
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+    /* Clickable rows (except Add area) */
+    .item-row {
+        cursor: pointer;
+    }
+
+        .item-row .no-popup {
+            cursor: default;
+        }
+    
+</style>
+
+<div class="menu-wrap">
+    @if (Model.Menus != null && Model.Menus.Any())
+    {
+        foreach (var menu in Model.Menus)
+        {
+            var sectionId = Slugify(menu.Title);
+
+            <section id="@sectionId" class="menu-section" data-cat="@sectionId">
+                <h5 class="mt-3 mb-2">@menu.Title</h5>
+
+                @if (menu.Items != null && menu.Items.Any())
+                {
+                    <table class="table table-bordered table-sm menu-table">
+                        <thead>
+                            <tr>
+                                <th>Photo</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th class="text-end">Add</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in menu.Items)
+                            {
+                                var imageUrl = string.IsNullOrWhiteSpace(item.ImageUrl) ? "" : item.ImageUrl;
+                                var desc = string.IsNullOrWhiteSpace(item.Description) ? "No description." : item.Description;
+
+                                <tr class="item-row"
+                                    data-cat="@sectionId"
+                                    data-item-name="@item.Name"
+                                    data-item-desc="@desc"
+                                    data-item-img="@imageUrl">
+                                    <td>
+                                        @if (!string.IsNullOrWhiteSpace(imageUrl))
+                                        {
+                                            <img src="@imageUrl" alt="@item.Name" class="menu-thumb" />
+                                        }
+                                        else
+                                        {
+                                            <span class="menu-thumb placeholder">@item.Name?.FirstOrDefault()</span>
+                                        }
+                                    </td>
+                                    <td title="@desc">@item.Name</td>
+                                    <td>@item.Price.ToString("C")</td>
+                                    <td class="text-end no-popup">
+                                        <form asp-controller="Cart" asp-action="Add" method="post" class="d-inline-flex align-items-center gap-2">
+                                            <input type="hidden" name="menuItemId" value="@item.Id" />
+                                            <input type="number" name="quantity" value="1" min="1"
+                                                   class="form-control form-control-sm"
+                                                   style="width:72px;" />
+                                            <button type="submit" class="btn btn-sm btn-primary">Add</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="text-muted">No items in this menu.</p>
+                }
+            </section>
+        }
+    }
+    else
+    {
+        <p>No menus available for this restaurant.</p>
+    }
+</div>
 
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+<!-- Modal (Bootstrap 5) -->
+<div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemModalLabel">Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex gap-3 align-items-start">
+                    <img id="itemModalImg" src="" alt="" class="rounded" style="width:140px;height:140px;object-fit:cover;border:1px solid rgba(0,0,0,.08);background:#f8f9fa;" />
+                    <div>
+                        <p id="itemModalDesc" class="mb-0"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Utilities
+        const $ = (sel, root = document) => root.querySelector(sel);
+        const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+        // State
+        let filterMode = false;
+        const toggleBtn = document.getElementById('filterToggle');
+
+        // Sections and pills container
+        const sections = $$('.menu-section');
+        const pillsBar = document.querySelector('.menu-cats'); // container that holds the pills
+
+        // Helpers
+        function setToggleLabel() {
+          if (!toggleBtn) return;
+          toggleBtn.textContent = 'Filter: ' + (filterMode ? 'On' : 'Off');
+          toggleBtn.classList.toggle('btn-secondary', filterMode);
+          toggleBtn.classList.toggle('btn-outline-secondary', !filterMode);
+        }
+
+        function clearFilter() {
+          sections.forEach(sec => sec.classList.remove('d-none'));
+          $$('.menu-cats [data-filter]').forEach(btn => btn.classList.remove('active'));
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function applyFilter(cat) {
+          if (cat === 'all') { clearFilter(); return; }
+          sections.forEach(sec => {
+            const match = sec.getAttribute('data-cat') === cat;
+            sec.classList.toggle('d-none', !match);
+          });
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle Filter/Scroll
+        if (toggleBtn) {
+          setToggleLabel();
+          toggleBtn.addEventListener('click', () => {
+            if (filterMode) { clearFilter(); } // ON -> OFF: show everything
+            filterMode = !filterMode;
+            setToggleLabel();
+            if (filterMode) clearFilter();     // OFF -> ON: start clean
+          });
+        }
+
+        // Event delegation for pills
+        if (pillsBar) {
+          pillsBar.addEventListener('click', (e) => {
+            const a = e.target.closest('[data-filter]');
+            if (!a) return;
+            e.preventDefault();
+
+            const cat = a.getAttribute('data-filter');
+
+            $$('.menu-cats [data-filter]').forEach(btn => btn.classList.remove('active'));
+            a.classList.add('active');
+
+            if (filterMode) {
+              applyFilter(cat);
+            } else {
+              sections.forEach(sec => sec.classList.remove('d-none')); // ensure visible
+              if (cat === 'all') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              } else {
+                const target = document.getElementById(cat);
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
+              }
+            }
+          });
+        }
+
+        // ---------- Item popup (modal) ----------
+        // Click anywhere on a row EXCEPT the "Add" cell/form to open the modal
+        document.addEventListener('click', (e) => {
+          const row = e.target.closest('.item-row');
+          if (!row) return;
+
+          // If the click happened inside the no-popup area (qty/add), do nothing
+          if (e.target.closest('.no-popup, .no-popup *')) return;
+
+          const name = row.getAttribute('data-item-name') || 'Item';
+          const desc = row.getAttribute('data-item-desc') || 'No description.';
+          const img  = row.getAttribute('data-item-img') || '';
+
+          $('#itemModalLabel').textContent = name;
+          $('#itemModalDesc').textContent = desc;
+
+          const imgEl = $('#itemModalImg');
+          if (img) {
+            imgEl.src = img;
+            imgEl.alt = name;
+            imgEl.classList.remove('d-none');
+          } else {
+            imgEl.src = '';
+            imgEl.alt = '';
+            imgEl.classList.add('d-none');
+          }
+
+          // Show modal (Bootstrap 5)
+          if (window.bootstrap && bootstrap.Modal) {
+            const modal = new bootstrap.Modal(document.getElementById('itemModal'));
+            modal.show();
+          } else {
+            alert(name + "\\n\\n" + desc); // Fallback if Bootstrap isn't loaded
+          }
+        });
+    </script>
+}

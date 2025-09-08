@@ -85,3 +85,78 @@ a{color:var(--brand);}
         transition: .15s ease-in-out;
         box-shadow: 0 12px 28px rgba(0,0,0,.08)
     }
+
+.restaurant-details .menu-list .list-group-item {
+    transition: background-color .15s ease;
+}
+
+    .restaurant-details .menu-list .list-group-item:hover {
+        background-color: #fafafa;
+    }
+
+
+.restaurant-details .price-tag {
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.restaurant-details .quantity-group .form-control {
+    width: 64px;
+}
+
+
+/* Keep thumbnails from stretching */
+.restaurant-details .menu-thumb {
+    width: 120px;
+    height: 120px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #eee;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .restaurant-details .menu-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+
+/* Clamp long descriptions to two lines */
+.restaurant-details .clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+
+/* Category pill bar (sticky, like Korpa) */
+.restaurant-details .menu-cats {
+    position: sticky;
+    top: 58px;
+    z-index: 1020;
+    background: #fff;
+    padding: .5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+    .restaurant-details .menu-cats .btn {
+        border-radius: 999px;
+        font-weight: 600;
+    }
+
+
+@media (max-width: 576px) {
+    .restaurant-details .menu-thumb {
+        width: 90px;
+        height: 90px;
+    }
+
+    .restaurant-details .price-tag {
+        font-size: 1rem;
+    }
+}
