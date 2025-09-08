@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -19,74 +18,83 @@ namespace FoodDeliveryAna.Web
             this._context = _context;
         }
 
-        // GET: Menus
-        public async Task<IActionResult> Index(Guid? restaurantId, Guid? menuId, string? q, string? category)
+        // GET: /Menus
+        // Supports:
+        //  - q=<text>                    (name/description search)
+        //  - restaurant=<slug>           (e.g., amigos-centar from the pills)
+        //  - restaurantId=<guid>         (optional direct filter)
+        //  - menuId=<guid>               (optional direct filter)
+        public async Task<IActionResult> Index(
+             Guid? restaurantId,
+             Guid? menuId,
+             string? q,
+             string? restaurant // slug coming from the view
+         )
         {
-            // Base query: all items with their Menu and Restaurant for display
-            IQueryable<MenuItem> qy = _context.MenuItems
-                .Include(i => i.Menu)
+            // Base query with necessary includes (DB-side)
+            IQueryable<MenuItem> query = _context.MenuItems
+                .Include(mi => mi.Menu)
                 .ThenInclude(m => m.Restaurant);
 
-            // Filter by menu or restaurant if provided (supports /Menus?restaurantId=... or /Menus?menuId=...)
+            // Narrow by explicit ids first (DB-side)
             if (menuId.HasValue)
-                qy = qy.Where(i => i.MenuId == menuId.Value);
+            {
+                query = query.Where(mi => mi.MenuId == menuId.Value);
+            }
             else if (restaurantId.HasValue)
-                qy = qy.Where(i => i.Menu != null && i.Menu.RestaurantId == restaurantId.Value);
+            {
+                query = query.Where(mi => mi.Menu != null && mi.Menu.RestaurantId == restaurantId.Value);
+            }
 
-            // Text search
+            // Text search (DB-side)
             if (!string.IsNullOrWhiteSpace(q))
             {
-                var ql = q!.ToLower();
-                qy = qy.Where(i => i.Name.ToLower().Contains(ql));
+                var ql = q.Trim().ToLower();
+                query = query.Where(mi =>
+                    EF.Functions.Like(mi.Name.ToLower(), $"%{ql}%") ||
+                    (mi.Description != null && EF.Functions.Like(mi.Description.ToLower(), $"%{ql}%")));
             }
 
-            // Category filter (keyword-based matching on item name)
-            if (!string.IsNullOrWhiteSpace(category))
+            // Order for stable UI (DB-side)
+            query = query
+                .OrderBy(mi => mi.Menu!.Restaurant!.Name)
+                .ThenBy(mi => mi.Name);
+
+            // Materialize to memory BEFORE applying Slugify (EF cannot translate custom methods)
+            var items = await query
+                .AsNoTracking()
+                .ToListAsync();
+
+            // Slug filter (client-side / in-memory)
+            if (!string.IsNullOrWhiteSpace(restaurant))
             {
-                var cat = category!.ToLower();
-                qy = cat switch
-                {
-                    "pizza" => qy.Where(i => i.Name.ToLower().Contains("pizza")),
-                    "burgers" or "burger" => qy.Where(i => i.Name.ToLower().Contains("burger")),
-                    "sushi" => qy.Where(i => i.Name.ToLower().Contains("sushi")),
-                    "dessert" or "desserts" =>
-                        qy.Where(i =>
-                            i.Name.ToLower().Contains("dessert") ||
-                            i.Name.ToLower().Contains("cake") ||
-                            i.Name.ToLower().Contains("ice")),
-                    _ => qy
-                };
+                var targetSlug = restaurant.Trim().ToLower();
+                items = items
+                    .Where(mi =>
+                        mi?.Menu?.Restaurant?.Name != null &&
+                        Slugify(mi.Menu.Restaurant.Name) == targetSlug)
+                    .ToList();
             }
 
-            var items = await qy.ToListAsync();
+            // Pass current filters back to the view (optional)
+            ViewBag.Q = q;
+            ViewBag.Restaurant = restaurant;
+            ViewBag.RestaurantId = restaurantId;
+            ViewBag.MenuId = menuId;
 
             return View(items);
         }
 
-
-
-
-        //public async Task<IActionResult> Index()
-        //{
-        //    var applicationDbContext = _context.Menus.Include(m => m.Restaurant);
-        //    return View(await applicationDbContext.ToListAsync());
-        //}
-
         // GET: Menus/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var menu = await _context.Menus
                 .Include(m => m.Restaurant)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (menu == null)
-            {
-                return NotFound();
-            }
+
+            if (menu == null) return NotFound();
 
             return View(menu);
         }
@@ -99,8 +107,6 @@ namespace FoodDeliveryAna.Web
         }
 
         // POST: Menus/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Title,RestaurantId,Id")] Menu menu)
@@ -119,31 +125,21 @@ namespace FoodDeliveryAna.Web
         // GET: Menus/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var menu = await _context.Menus.FindAsync(id);
-            if (menu == null)
-            {
-                return NotFound();
-            }
+            if (menu == null) return NotFound();
+
             ViewData["RestaurantId"] = new SelectList(_context.Restaurants, "Id", "Name", menu.RestaurantId);
             return View(menu);
         }
 
         // POST: Menus/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("Title,RestaurantId,Id")] Menu menu)
         {
-            if (id != menu.Id)
-            {
-                return NotFound();
-            }
+            if (id != menu.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -154,14 +150,8 @@ namespace FoodDeliveryAna.Web
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MenuExists(menu.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!MenuExists(menu.Id)) return NotFound();
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -172,18 +162,13 @@ namespace FoodDeliveryAna.Web
         // GET: Menus/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var menu = await _context.Menus
                 .Include(m => m.Restaurant)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (menu == null)
-            {
-                return NotFound();
-            }
+
+            if (menu == null) return NotFound();
 
             return View(menu);
         }
@@ -206,6 +191,18 @@ namespace FoodDeliveryAna.Web
         private bool MenuExists(Guid id)
         {
             return _context.Menus.Any(e => e.Id == id);
+        }
+
+        // --- Shared with view: same slug logic the pills use ---
+        private static string Slugify(string s)
+        {
+            if (string.IsNullOrWhiteSpace(s)) return "";
+            var chars = s.Trim().ToLowerInvariant()
+                .Select(ch => char.IsLetterOrDigit(ch) ? ch : '-')
+                .ToArray();
+            var slug = new string(chars);
+            while (slug.Contains("--")) slug = slug.Replace("--", "-");
+            return slug.Trim('-');
         }
     }
 }
