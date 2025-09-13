@@ -31,6 +31,7 @@ namespace FoodDeliveryAna.Web.Areas.Courier.Controllers
             return View(myOrders);
         }
 
+        // Accept (assign to current courier)
         [HttpPost]
         public async Task<IActionResult> Accept(Guid id)
         {
@@ -38,39 +39,48 @@ namespace FoodDeliveryAna.Web.Areas.Courier.Controllers
             var order = await _db.Orders.FindAsync(id);
             if (order == null) return NotFound();
             if (order.Status != OrderStatus.Placed) return BadRequest();
+
             order.Status = OrderStatus.Accepted;
             order.CourierId = user.Id;
             order.AcceptedAt = DateTime.UtcNow;
+
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
+        // Start delivery (picked up)
         [HttpPost]
-        public async Task<IActionResult> PickUp(Guid id)
+        public async Task<IActionResult> StartDelivery(Guid id)
         {
             var user = await _users.GetUserAsync(User);
             var order = await _db.Orders.FindAsync(id);
             if (order == null) return NotFound();
             if (order.CourierId != user.Id) return Forbid();
             if (order.Status != OrderStatus.Accepted) return BadRequest();
+
             order.Status = OrderStatus.PickedUp;
             order.PickedUpAt = DateTime.UtcNow;
+
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
+        // Mark delivered
         [HttpPost]
-        public async Task<IActionResult> Deliver(Guid id)
+        public async Task<IActionResult> MarkDelivered(Guid id)
         {
             var user = await _users.GetUserAsync(User);
             var order = await _db.Orders.FindAsync(id);
             if (order == null) return NotFound();
             if (order.CourierId != user.Id) return Forbid();
             if (order.Status != OrderStatus.PickedUp) return BadRequest();
+
             order.Status = OrderStatus.Delivered;
             order.DeliveredAt = DateTime.UtcNow;
+
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
     }
 }

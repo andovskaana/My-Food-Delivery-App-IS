@@ -1,60 +1,165 @@
+@using System.Globalization
+@using System.Security.Claims
 @model IEnumerable<FoodDeliveryAna.Domain.DomainModels.Order>
+
 @{
     ViewData["Title"] = "Courier Dashboard";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    string Money(decimal v) => v.ToString("C", CultureInfo.CurrentCulture);
+    var myId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    var Placed = FoodDeliveryAna.Domain.Enums.OrderStatus.Placed;
+    var Accepted = FoodDeliveryAna.Domain.Enums.OrderStatus.Accepted;
+    var PickedUp = FoodDeliveryAna.Domain.Enums.OrderStatus.PickedUp;
+    var Delivered = FoodDeliveryAna.Domain.Enums.OrderStatus.Delivered;
+
+    var available = Model.Where(o => o.CourierId == null && o.Status == Placed)
+                          .OrderByDescending(o => o.CreatedAt)
+                          .ToList();
+
+    var inProgress = Model.Where(o => o.CourierId == myId && (o.Status == Accepted || o.Status == PickedUp))
+                          .OrderByDescending(o => o.CreatedAt)
+                          .ToList();
+
+    var completed = Model.Where(o => o.CourierId == myId && o.Status == Delivered)
+                          .OrderByDescending(o => o.CreatedAt)
+                          .ToList();
 }
+
 <div class="container mt-4">
     <h2 class="mb-3">Courier Dashboard</h2>
 
-    <div class="table-responsive card shadow-sm">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
-                <tr>
-                    <th>#</th>
-                    <th>Status</th>
-                    <th>Total</th>
-                    <th>Placed</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach (var o in Model)
-            {
-                <tr>
-                    <td>@o.Id</td>
-                    <td>@o.Status</td>
-                    <td>@o.Total.ToString("C")</td>
-                    <td>@o.CreatedAt.ToLocalTime()</td>
-                    <td>
-                        @if (o.Status == FoodDeliveryAna.Domain.Enums.OrderStatus.Placed && o.CourierId == null)
+    <!-- In progress -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">In progress</div>
+        <div class="card-body table-responsive">
+            <table class="table table-striped align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th>Placed</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (inProgress.Any())
+                    {
+                        foreach (var o in inProgress)
                         {
-                            <form asp-action="Accept" method="post" class="d-inline">
-                                <input type="hidden" name="id" value="@o.Id" />
-                                <button class="btn btn-sm btn-primary">Accept</button>
-                            </form>
+                            <tr>
+                                <td>@o.Id</td>
+                                <td>@o.Status</td>
+                                <td>@Money(o.Total)</td>
+                                <td>@o.CreatedAt.ToLocalTime()</td>
+                                <td class="text-end">
+                                    @if (o.Status == Accepted)
+                                    {
+                                        <form asp-action="StartDelivery" method="post" class="d-inline">
+                                            <input type="hidden" name="id" value="@o.Id" />
+                                            <button class="btn btn-sm btn-warning">Start delivery</button>
+                                        </form>
+                                    }
+                                    else if (o.Status == PickedUp)
+                                    {
+                                        <form asp-action="MarkDelivered" method="post" class="d-inline">
+                                            <input type="hidden" name="id" value="@o.Id" />
+                                            <button class="btn btn-sm btn-success">Mark delivered</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">No actions</span>
+                                    }
+                                </td>
+                            </tr>
                         }
-                        else if (o.Status == FoodDeliveryAna.Domain.Enums.OrderStatus.Accepted)
+                    }
+                    else
+                    {
+                        <tr><td colspan="5" class="text-muted">No active deliveries right now.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Available to accept -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">Available orders</div>
+        <div class="card-body table-responsive">
+            <table class="table table-striped align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th>Placed</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (available.Any())
+                    {
+                        foreach (var o in available)
                         {
-                            <form asp-action="PickUp" method="post" class="d-inline">
-                                <input type="hidden" name="id" value="@o.Id" />
-                                <button class="btn btn-sm btn-warning">Picked Up</button>
-                            </form>
+                            <tr>
+                                <td>@o.Id</td>
+                                <td>@o.Status</td>
+                                <td>@Money(o.Total)</td>
+                                <td>@o.CreatedAt.ToLocalTime()</td>
+                                <td class="text-end">
+                                    <form asp-action="Accept" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@o.Id" />
+                                        <button class="btn btn-sm btn-primary">Accept</button>
+                                    </form>
+                                </td>
+                            </tr>
                         }
-                        else if (o.Status == FoodDeliveryAna.Domain.Enums.OrderStatus.PickedUp)
+                    }
+                    else
+                    {
+                        <tr><td colspan="5" class="text-muted">No orders available to accept.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Completed -->
+    <div class="card shadow-sm">
+        <div class="card-header">Completed</div>
+        <div class="card-body table-responsive">
+            <table class="table table-striped align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th>Placed</th>
+                        <th>Delivered</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (completed.Any())
+                    {
+                        foreach (var o in completed)
                         {
-                            <form asp-action="Deliver" method="post" class="d-inline">
-                                <input type="hidden" name="id" value="@o.Id" />
-                                <button class="btn btn-sm btn-success">Delivered</button>
-                            </form>
+                            <tr>
+                                <td>@o.Id</td>
+                                <td>@o.Status</td>
+                                <td>@Money(o.Total)</td>
+                                <td>@o.CreatedAt.ToLocalTime()</td>
+                                <td>@o.DeliveredAt?.ToLocalTime()</td>
+                            </tr>
                         }
-                        else
-                        {
-                            <span class="text-muted">No actions</span>
-                        }
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
+                    }
+                    else
+                    {
+                        <tr><td colspan="5" class="text-muted">No completed deliveries yet.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

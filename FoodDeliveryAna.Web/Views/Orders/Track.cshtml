@@ -1,0 +1,75 @@
+﻿@model FoodDeliveryAna.Domain.DomainModels.Order
+@{
+    ViewData["Title"] = "Track order";
+    var s = Model.Status; // Placed, Accepted, PickedUp, Delivered
+    int step = s == FoodDeliveryAna.Domain.Enums.OrderStatus.Placed ? 1
+        : s == FoodDeliveryAna.Domain.Enums.OrderStatus.Accepted ? 2
+        : s == FoodDeliveryAna.Domain.Enums.OrderStatus.PickedUp ? 3
+        : 4;
+}
+
+<div class="container mt-4">
+    <h2 class="mb-3">Track order</h2>
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="small text-muted">Order ID</div>
+                    <div class="fw-semibold">@Model.Id</div>
+                </div>
+                <div class="col-md-3">
+                    <div class="small text-muted">Status</div>
+                    <div class="fw-semibold">@Model.Status</div>
+                </div>
+                <div class="col-md-3">
+                    <div class="small text-muted">Courier</div>
+                    <div class="fw-semibold">@Model.Courier?.Email ?? "—"</div>
+                </div>
+                <div class="col-md-3">
+                    <div class="small text-muted">Total</div>
+                    <div class="fw-semibold">@Model.Total.ToString("C")</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stepper -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <ol class="list-group list-group-numbered">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Placed
+                    <span class="badge bg-@(step >= 1 ? "success" : "secondary")">@Model.CreatedAt.ToLocalTime()</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Accepted
+                    <span class="badge bg-@(step >= 2 ? "success" : "secondary")">
+                        @(Model.AcceptedAt?.ToLocalTime().ToString() ?? "—")
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    On the way
+                    <span class="badge bg-@(step >= 3 ? "success" : "secondary")">
+                        @(Model.PickedUpAt?.ToLocalTime().ToString() ?? "—")
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Delivered
+                    <span class="badge bg-@(step >= 4 ? "success" : "secondary")">
+                        @(Model.DeliveredAt?.ToLocalTime().ToString() ?? "—")
+                    </span>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="text-muted small mt-2">This page refreshes every 10 seconds.</div>
+</div>
+
+@section Scripts {
+    <script>
+        // simple polling refresh (can be upgraded to SignalR later)
+        setTimeout(() => location.reload(), 10000);
+    </script>
+}

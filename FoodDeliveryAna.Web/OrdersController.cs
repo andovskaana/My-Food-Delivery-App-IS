@@ -132,6 +132,29 @@ namespace FoodDeliveryAna.Web
             return View(orders);
         }
 
+        //TRACK ORDERS MIGHT WORK
+        // GET: /Orders/Track/{id}
+        [HttpGet]
+        public async Task<IActionResult> Track(Guid id)
+        {
+            var order = await _context.Orders
+                .Include(o => o.Owner)
+                .Include(o => o.Courier)
+                .Include(o => o.Items)
+                .FirstOrDefaultAsync(o => o.Id == id);
+            if (order == null) return NotFound();
+
+            var me = await _userManager.GetUserAsync(User);
+            var isOwner = order.OwnerId == me.Id;
+            var isCourier = order.CourierId == me.Id;
+            var isAdmin = User.IsInRole("Admin");
+
+            if (!(isOwner || isCourier || isAdmin)) return Forbid();
+
+            return View(order);
+        }
+
+
         public record CompleteOrderRequest(string PaymentIntentId);
 
         [HttpPost]

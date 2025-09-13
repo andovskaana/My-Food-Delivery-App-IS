@@ -60,7 +60,7 @@
             padding: .875rem 1rem;
             border-bottom: 1px solid rgba(0,0,0,.06);
             width: 100%;
-           /* ? background: var(--surface-2); */
+            /* background: var(--surface-2); */
         }
 
         .orders-table tbody td {
@@ -150,7 +150,7 @@
             <div class="text-muted">When you place an order, it will show up here.</div>
         </div>
         <div class="mt-3">
-            <a asp-controller="Restaurants" asp-action="Index" class="btn btn-brand">Browse restaurants</a>
+            <a asp-area="" asp-controller="Restaurants" asp-action="Index" class="btn btn-brand">Browse restaurants</a>
         </div>
     </div>
 }
@@ -175,9 +175,18 @@ else
                         <td data-label="Total" class="fw-semibold">@Money(o.Total)</td>
                         <td data-label="Items"><span class="chip">@itemCount</span></td>
                         <td class="text-end" data-label="Actions">
-                        <td><a asp-action="Success" asp-route-id="@o.Id">View</a></td>
-
-
+                            <div class="d-inline-flex gap-2">
+                                <a class="btn btn-sm btn-outline-primary"
+                                   asp-area=""
+                                   asp-controller="Orders" asp-action="Track" asp-route-id="@o.Id">
+                                    Track
+                                </a>
+                                <a class="btn btn-sm btn-outline-secondary"
+                                   asp-area=""
+                                   asp-controller="Orders" asp-action="Success" asp-route-id="@o.Id">
+                                    View
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 }
