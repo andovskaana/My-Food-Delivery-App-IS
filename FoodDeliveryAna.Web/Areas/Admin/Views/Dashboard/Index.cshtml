@@ -1,0 +1,113 @@
+@model IEnumerable<FoodDeliveryAna.Domain.DomainModels.Order>
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container mt-4">
+    <h2 class="mb-3">Admin Dashboard</h2>
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="h5">Restaurants</div>
+                    <div class="display-6">@ViewBag.RestaurantCount</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="h5">Orders</div>
+                    <div class="display-6">@ViewBag.OrderCount</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="h5">Users</div>
+                    <div class="display-6">@ViewBag.UserCount</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header">
+            Recent Orders
+        </div>
+        <div class="card-body table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Customer</th>
+                        <th>Courier</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th>Placed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var o in Model)
+                {
+                    <tr>
+                        <td>@o.Id</td>
+                        <td>@o.Owner?.Email</td>
+                        <td>@o.Courier?.Email</td>
+                        <td>@o.Status</td>
+                        <td>@o.Total.ToString("C")</td>
+                        <td>@o.CreatedAt.ToLocalTime()</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+        @* ==== Users Management (simple table + actions) ==== *@
+        @{
+            // Users passed via ViewBag.Users from the controller
+            var users = ViewBag.Users as IEnumerable<FoodDeliveryAna.Web.Areas.Admin.Controllers.DashboardController.UserRow>;
+        }
+        <div class="card shadow-sm mt-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Users</span>
+                <a class="btn btn-sm btn-primary" asp-area="Admin" asp-controller="Dashboard" asp-action="CreateUser">+ New User</a>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Email</th>
+                            <th>Name</th>
+                            <th>Roles</th>
+                            <th style="width: 180px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (users != null)
+                        {
+                            foreach (var u in users)
+                            {
+                                <tr>
+                                    <td>@u.Email</td>
+                                    <td>@u.Name</td>
+                                    <td>@u.RolesCsv</td>
+                                    <td class="text-end">
+                                        <a class="btn btn-sm btn-outline-secondary"
+                                           asp-area="Admin" asp-controller="Dashboard" asp-action="EditUser" asp-route-id="@u.Id">Edit</a>
+                                        <form method="post" class="d-inline"
+                                              asp-area="Admin" asp-controller="Dashboard" asp-action="DeleteUser" asp-route-id="@u.Id"
+                                              onsubmit="return confirm('Delete this user?');">
+                                            <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

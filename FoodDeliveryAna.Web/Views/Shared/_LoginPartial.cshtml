@@ -6,6 +6,19 @@
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
+    @if (User.IsInRole("Admin"))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin</a>
+        </li>
+    }
+    @if (User.IsInRole("Courier"))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Courier" asp-controller="Dashboard" asp-action="Index">Courier</a>
+        </li>
+    }
+
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
     </li>

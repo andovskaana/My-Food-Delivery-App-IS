@@ -1,0 +1,60 @@
+@model IEnumerable<FoodDeliveryAna.Domain.DomainModels.Order>
+@{
+    ViewData["Title"] = "Courier Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container mt-4">
+    <h2 class="mb-3">Courier Dashboard</h2>
+
+    <div class="table-responsive card shadow-sm">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Status</th>
+                    <th>Total</th>
+                    <th>Placed</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var o in Model)
+            {
+                <tr>
+                    <td>@o.Id</td>
+                    <td>@o.Status</td>
+                    <td>@o.Total.ToString("C")</td>
+                    <td>@o.CreatedAt.ToLocalTime()</td>
+                    <td>
+                        @if (o.Status == FoodDeliveryAna.Domain.Enums.OrderStatus.Placed && o.CourierId == null)
+                        {
+                            <form asp-action="Accept" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@o.Id" />
+                                <button class="btn btn-sm btn-primary">Accept</button>
+                            </form>
+                        }
+                        else if (o.Status == FoodDeliveryAna.Domain.Enums.OrderStatus.Accepted)
+                        {
+                            <form asp-action="PickUp" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@o.Id" />
+                                <button class="btn btn-sm btn-warning">Picked Up</button>
+                            </form>
+                        }
+                        else if (o.Status == FoodDeliveryAna.Domain.Enums.OrderStatus.PickedUp)
+                        {
+                            <form asp-action="Deliver" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@o.Id" />
+                                <button class="btn btn-sm btn-success">Delivered</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-muted">No actions</span>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
