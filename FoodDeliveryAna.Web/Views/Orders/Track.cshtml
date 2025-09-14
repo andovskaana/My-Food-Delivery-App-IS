@@ -6,70 +6,351 @@
         : s == FoodDeliveryAna.Domain.Enums.OrderStatus.Accepted ? 2
         : s == FoodDeliveryAna.Domain.Enums.OrderStatus.PickedUp ? 3
         : 4;
+
+    string StatusClass(int n) => step > n ? "complete"
+        : step == n ? "current"
+        : "pending";
 }
 
-<div class="container mt-4">
-    <h2 class="mb-3">Track order</h2>
+<style>
+    /* ---- brand system copied from success page ---- */
+    :root {
+        --brand-start: #7b5cff;
+        --brand-end: #6a4cff;
+        --brand: #6f4cff;
+        --ink: #1f2328;
+        --muted: #6b7280;
+        --surface: #ffffff;
+        --surface-2: #f6f7fb;
+        --ring: rgba(111,76,255,.35);
+    }
 
-    <div class="card shadow-sm mb-3">
-        <div class="card-body">
-            <div class="row g-3">
-                <div class="col-md-3">
-                    <div class="small text-muted">Order ID</div>
-                    <div class="fw-semibold">@Model.Id</div>
+    .btn-brand {
+        background: var(--brand);
+        color: #fff;
+        border: none;
+        padding: .55rem 1.1rem;
+        border-radius: .75rem;
+        font-weight: 600;
+        box-shadow: 0 8px 18px var(--ring);
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-brand:hover {
+            filter: brightness(.97);
+            color: #fff;
+        }
+
+    .btn-outline {
+        border: 1px solid var(--brand);
+        color: var(--brand);
+        padding: .55rem 1.1rem;
+        border-radius: .75rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-outline:hover {
+            background: var(--brand);
+            color: #fff;
+        }
+
+    .actions {
+        margin-top: 1rem;
+        display: flex;
+        gap: .75rem;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+
+    /* ---- page polish for track page ---- */
+    .track-header {
+        background: linear-gradient(135deg, var(--brand-start), var(--brand-end));
+        color: #fff;
+        border-radius: 1.25rem;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1.25rem;
+        box-shadow: 0 8px 20px rgba(0,0,0,.12);
+    }
+
+    .track-subtle {
+        background: var(--surface);
+        border: 1px solid rgba(0,0,0,.06);
+        border-radius: 1rem;
+        box-shadow: 0 6px 18px rgba(0,0,0,.06);
+    }
+
+    /* ---- status badge ---- */
+    .badge-status {
+        font-size: .95rem;
+        padding: .5rem .75rem;
+        border-radius: 999px;
+        background: #fff;
+        color: #111;
+    }
+
+        .badge-status.placed {
+            background: #e5e7eb;
+        }
+
+        .badge-status.accepted {
+            background: #c7cdd8;
+        }
+
+        .badge-status.ontheway {
+            background: #d6e0ff;
+            color: #1d4ed8;
+        }
+
+        .badge-status.delivered {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+    /* ---- vertical stepper ---- */
+    .stepper {
+        position: relative;
+        margin: 0;
+        padding-left: 0;
+        list-style: none;
+    }
+
+        .stepper li {
+            display: grid;
+            grid-template-columns: 28px 1fr auto;
+            column-gap: .75rem;
+            align-items: start;
+            position: relative;
+            padding: .5rem 0 1rem 0;
+        }
+
+            .stepper li::before {
+                content: "";
+                position: absolute;
+                left: 13px;
+                top: 30px;
+                width: 2px;
+                height: calc(100% - 30px);
+                background: #e5e7eb;
+            }
+
+            .stepper li:last-child::before {
+                display: none;
+            }
+
+        .stepper .dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            border: 2px solid #e5e7eb;
+            background: #fff;
+            font-weight: 600;
+        }
+
+        /* states */
+        .stepper li.complete .dot {
+            background: #16a34a;
+            border-color: #16a34a;
+            color: #fff;
+        }
+
+        .stepper li.current .dot {
+            border-color: var(--brand);
+            box-shadow: 0 0 0 4px var(--ring);
+            color: #111;
+        }
+
+        .stepper li.pending .dot {
+            color: #9ca3af;
+        }
+
+        .stepper .label {
+            font-weight: 600;
+        }
+
+        .stepper .meta {
+            color: #6b7280;
+            font-size: .9rem;
+        }
+
+    /* subtle animation */
+    @@keyframes pop {
+        0%
+
+    {
+        transform: scale(.8);
+        opacity: .0
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1
+    }
+
+    }
+
+    .stepper li.complete .dot,
+    .stepper li.current .dot {
+        animation: pop .25s ease-out both;
+    }
+
+    /* layout tweaks */
+    .copy-btn {
+        border: 1px dashed #e5e7eb;
+        font-size: .75rem;
+    }
+
+    @@media (max-width: 575.98px) {
+        .actions
+
+    {
+        justify-content: center;
+    }
+
+    }
+</style>
+
+<div class="container mt-4">
+    <!-- Header -->
+    <div class="track-header d-flex flex-wrap align-items-center justify-content-between">
+        <div>
+            <h2 class="mb-1">Track order</h2>
+            <div class="opacity-75">Order progress and details below</div>
+        </div>
+        <div aria-live="polite">
+            <span class="badge-status @(step switch { 1 => "placed", 2 => "accepted", 3 => "ontheway", _ => "delivered" })">
+                @Model.Status
+            </span>
+        </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="track-subtle mb-4">
+        <div class="p-3 p-md-4">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-5">
+                    <div class="small text-muted mb-1">Order ID</div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="fw-semibold text-break">@Model.Id</span>
+                        <button class="btn btn-sm btn-light copy-btn" type="button" data-copy="@Model.Id">Copy</button>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="small text-muted">Status</div>
-                    <div class="fw-semibold">@Model.Status</div>
+
+                <div class="col-md-2">
+                    <div class="small text-muted mb-1">Total</div>
+                    <div class="fw-bold fs-5">@Model.Total.ToString("C")</div>
                 </div>
+
                 <div class="col-md-3">
-                    <div class="small text-muted">Courier</div>
-                    <div class="fw-semibold">@Model.Courier?.Email ?? "—"</div>
+                    <div class="small text-muted mb-1">Courier</div>
+                    <div class="fw-semibold">
+                        @if (Model.Courier == null)
+                        {
+                            <span class="text-muted">No courier assigned yet</span>
+                        }
+                        else
+                        {
+                            var courierLabel = !string.IsNullOrWhiteSpace(Model.Courier.UserName)
+                            ? Model.Courier.UserName
+                            : Model.Courier.Email;
+
+                            <div class="d-flex flex-column">
+                                <span>@courierLabel</span>
+                                @if (!string.IsNullOrWhiteSpace(Model.Courier.PhoneNumber))
+                                {
+                                    <a class="meta text-decoration-none" href="tel:@Model.Courier.PhoneNumber">
+                                        @Model.Courier.PhoneNumber
+                                    </a>
+                                }
+                            </div>
+                        }
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="small text-muted">Total</div>
-                    <div class="fw-semibold">@Model.Total.ToString("C")</div>
+
+                <div class="col-md-2">
+                    <div class="small text-muted mb-1">Placed</div>
+                    <div class="fw-semibold">@Model.CreatedAt.ToLocalTime()</div>
                 </div>
+            </div>
+
+            <div class="actions">
+                <a class="btn-brand"
+                   asp-area=""
+                   asp-controller="Orders"
+                   asp-action="Success"
+                   asp-route-id="@Model.Id">
+                    View Order
+                </a>
+                <a class="btn-outline"
+                   asp-area=""
+                   asp-controller="Orders"
+                   asp-action="History">
+                    View Order History
+                </a>
+                <a class="btn-outline"
+                   asp-controller="Restaurants"
+                   asp-action="Index">
+                    Continue Shopping
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Stepper -->
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <ol class="list-group list-group-numbered">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Placed
-                    <span class="badge bg-@(step >= 1 ? "success" : "secondary")">@Model.CreatedAt.ToLocalTime()</span>
+    <!-- Timeline -->
+    <div class="track-subtle">
+        <div class="p-3 p-md-4">
+            <h5 class="mb-3">Delivery timeline</h5>
+            <ol class="stepper">
+                <li class="@StatusClass(1)">
+                    <div class="dot">1</div>
+                    <div class="label">Placed <div class="meta">Order received</div></div>
+                    <div class="text-end meta">@Model.CreatedAt.ToLocalTime()</div>
                 </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Accepted
-                    <span class="badge bg-@(step >= 2 ? "success" : "secondary")">
+                <li class="@StatusClass(2)">
+                    <div class="dot">2</div>
+                    <div class="label">Accepted <div class="meta">Restaurant confirmed</div></div>
+                    <div class="text-end meta">
                         @(Model.AcceptedAt?.ToLocalTime().ToString() ?? "—")
-                    </span>
+                    </div>
                 </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    On the way
-                    <span class="badge bg-@(step >= 3 ? "success" : "secondary")">
+                <li class="@StatusClass(3)">
+                    <div class="dot">3</div>
+                    <div class="label">On the way <div class="meta">Courier picked up</div></div>
+                    <div class="text-end meta">
                         @(Model.PickedUpAt?.ToLocalTime().ToString() ?? "—")
-                    </span>
+                    </div>
                 </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Delivered
-                    <span class="badge bg-@(step >= 4 ? "success" : "secondary")">
+                <li class="@StatusClass(4)">
+                    <div class="dot">4</div>
+                    <div class="label">Delivered <div class="meta">Order completed</div></div>
+                    <div class="text-end meta">
                         @(Model.DeliveredAt?.ToLocalTime().ToString() ?? "—")
-                    </span>
+                    </div>
                 </li>
             </ol>
         </div>
     </div>
-
-    <div class="text-muted small mt-2">This page refreshes every 10 seconds.</div>
 </div>
 
 @section Scripts {
     <script>
-        // simple polling refresh (can be upgraded to SignalR later)
-        setTimeout(() => location.reload(), 10000);
+        // Copy order id
+        document.querySelectorAll('[data-copy]')?.forEach(btn => {
+            btn.addEventListener('click', () => {
+                navigator.clipboard.writeText(btn.dataset.copy);
+                btn.textContent = 'Copied';
+                setTimeout(() => btn.textContent = 'Copy', 1200);
+            });
+        });
+
+        // Only auto-refresh while the order is not delivered/cancelled
+        const statusText = "@Model.Status".toLowerCase();
+        if (!['delivered','cancelled'].includes(statusText)) {
+            setTimeout(() => location.reload(), 10000);
+        }
     </script>
 }

@@ -4,6 +4,15 @@
 @{
     ViewData["Title"] = "Your Orders";
     string Money(decimal v) => v.ToString("C", CultureInfo.CurrentCulture);
+
+    string StatusCss(FoodDeliveryAna.Domain.Enums.OrderStatus s) => s switch
+    {
+        FoodDeliveryAna.Domain.Enums.OrderStatus.Placed => "st-placed",
+        FoodDeliveryAna.Domain.Enums.OrderStatus.Accepted => "st-accepted",
+        FoodDeliveryAna.Domain.Enums.OrderStatus.PickedUp => "st-ontheway",
+        FoodDeliveryAna.Domain.Enums.OrderStatus.Delivered => "st-delivered",
+        _ => "st-placed"
+    };
 }
 
 <style>
@@ -27,10 +36,13 @@
     }
 
     @@media (min-width:768px) {
-        .orders-hero {
-            padding: 1.75rem 2rem;
-            margin-bottom: 1.5rem;
-        }
+        .orders-hero
+
+    {
+        padding: 1.75rem 2rem;
+        margin-bottom: 1.5rem;
+    }
+
     }
 
     .orders-hero h1 {
@@ -59,8 +71,6 @@
             color: var(--muted);
             padding: .875rem 1rem;
             border-bottom: 1px solid rgba(0,0,0,.06);
-            width: 100%;
-            /* background: var(--surface-2); */
         }
 
         .orders-table tbody td {
@@ -101,41 +111,81 @@
         border-radius: 9999px;
     }
 
-    /* Mobile: table -> stacked rows */
-    @@media (max-width:640px) {
-        .orders-table thead {
-            display: none;
-        }
-
-        .orders-table tr {
-            display: block;
-            border-top: 1px solid rgba(0,0,0,.06);
-        }
-
-        .orders-table tbody td {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: none;
-            padding: .75rem 1rem;
-        }
-
-            .orders-table tbody td[data-label]::before {
-                content: attr(data-label);
-                font-weight: 600;
-                color: var(--muted);
-                margin-right: 1rem;
-            }
-
-            .orders-table tbody td:last-child {
-                padding-bottom: 1rem;
-            }
-
-        .orders-card {
-            overflow: hidden;
-        }
+    /* Status badges */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        font-weight: 700;
+        font-size: .78rem;
+        border-radius: 999px;
+        padding: .25rem .6rem;
+        border: 1px solid transparent;
+        white-space: nowrap;
     }
-</style>
+
+        .status-badge.st-placed {
+            color: #374151;
+            background: #f3f4f6;
+            border-color: #e5e7eb;
+        }
+
+        .status-badge.st-accepted {
+            color: #374151;
+            background: #eef2f7;
+            border-color: #e5e7eb;
+        }
+
+        .status-badge.st-ontheway {
+            color: #1d4ed8;
+            background: #e7efff;
+            border-color: #c7d2fe;
+        }
+
+        .status-badge.st-delivered {
+            color: #065f46;
+            background: #d1fae5;
+            border-color: #a7f3d0;
+        }
+    /* Optional if you use it:
+        .status-badge.st-cancelled { color:#991b1b; background:#fee2e2; border-color:#fecaca; } */
+
+    /* Mobile stacked table */
+    @@media (max-width:640px) {
+        .orders-table thead
+
+    {
+        display: none;
+    }
+
+    .orders-table tr {
+        display: block;
+        border-top: 1px solid rgba(0,0,0,.06);
+    }
+
+    .orders-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: none;
+        padding: .75rem 1rem;
+    }
+
+        .orders-table tbody td[data-label]::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: var(--muted);
+            margin-right: 1rem;
+        }
+
+        .orders-table tbody td:last-child {
+            padding-bottom: 1rem;
+        }
+
+    .orders-card {
+        overflow: hidden;
+    }
+
+    }</style>
 
 <div class="orders-hero">
     <h1 class="h4 h3-md">Your Orders</h1>
@@ -161,6 +211,7 @@ else
             <thead>
                 <tr>
                     <th>Date</th>
+                    <th>Status</th>
                     <th>Total</th>
                     <th>Items</th>
                     <th class="text-end">Actions</th>
@@ -172,8 +223,16 @@ else
                     var itemCount = (o?.Items?.Sum(i => i.Quantity) ?? 0);
                     <tr>
                         <td data-label="Date">@o.CreatedAt.ToLocalTime().ToString("dd MMM yyyy HH:mm")</td>
+
+                        <td data-label="Status">
+                            <span class="status-badge @StatusCss(o.Status)">
+                                @o.Status
+                            </span>
+                        </td>
+
                         <td data-label="Total" class="fw-semibold">@Money(o.Total)</td>
                         <td data-label="Items"><span class="chip">@itemCount</span></td>
+
                         <td class="text-end" data-label="Actions">
                             <div class="d-inline-flex gap-2">
                                 <a class="btn btn-sm btn-outline-primary"

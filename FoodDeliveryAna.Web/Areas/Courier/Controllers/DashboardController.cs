@@ -20,16 +20,33 @@ namespace FoodDeliveryAna.Web.Areas.Courier.Controllers
             _db = db; _users = users;
         }
 
+
         public async Task<IActionResult> Index()
         {
             var user = await _users.GetUserAsync(User);
             var myOrders = await _db.Orders
-                .Where(o => o.CourierId == user.Id || (o.CourierId == null && o.Status == OrderStatus.Placed))
-                .OrderBy(o => o.Status)
-                .ThenByDescending(o => o.CreatedAt)
-                .ToListAsync();
+                 .Where(o => o.CourierId == user.Id || (o.CourierId == null && o.Status == OrderStatus.Placed))
+                 .Include(o => o.Items)
+                     .ThenInclude(i => i.MenuItem)
+                         .ThenInclude(mi => mi.Menu)
+                             .ThenInclude(m => m.Restaurant)
+                 .Include(o => o.Owner) // if you show owner info/address stored on the user
+                 .OrderBy(o => o.Status)
+                 .ThenByDescending(o => o.CreatedAt)
+                 .ToListAsync();
             return View(myOrders);
         }
+
+        //public async Task<IActionResult> Index()
+        //{
+        //    var user = await _users.GetUserAsync(User);
+        //    var myOrders = await _db.Orders
+        //        .Where(o => o.CourierId == user.Id || (o.CourierId == null && o.Status == OrderStatus.Placed))
+        //        .OrderBy(o => o.Status)
+        //        .ThenByDescending(o => o.CreatedAt)
+        //        .ToListAsync();
+        //    return View(myOrders);
+        //}
 
         // Accept (assign to current courier)
         [HttpPost]

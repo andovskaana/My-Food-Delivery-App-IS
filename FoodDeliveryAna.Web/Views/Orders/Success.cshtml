@@ -199,5 +199,9 @@
     <div class="actions">
         <a asp-action="History" class="btn-brand">View Order History</a>
         <a asp-controller="Restaurants" asp-action="Index" class="btn-outline">Continue Shopping</a>
+        <a asp-controller="Orders" asp-action="Track" asp-route-id="@Model.Id" class="btn-brand">
+            Track
+        </a>
     </div>
+
 </div>

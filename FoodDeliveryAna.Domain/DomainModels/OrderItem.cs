@@ -10,6 +10,7 @@ namespace FoodDeliveryAna.Domain.DomainModels
     public class OrderItem : BaseEntity
     {
         public Guid MenuItemId { get; set; }
+        public virtual MenuItem? MenuItem { get; set; }
         public string MenuItemName { get; set; } = string.Empty; // snapshot
         [Column(TypeName = "decimal(18,2)")]  public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
