@@ -1,0 +1,35 @@
+﻿@page
+@model FoodDeliveryAna.Web.Areas.Identity.Pages.Account.Manage.AddressModel
+@{
+    ViewData["Title"] = "Delivery address";
+    ViewData["ActivePage"] = "Address";
+}
+
+<h3>Delivery address</h3>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+
+@if (!string.IsNullOrEmpty(Model.CurrentAddress))
+{
+    <div class="alert alert-info">
+        <strong>Current address:</strong> @Model.CurrentAddress
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        No address saved yet.
+    </div>
+}
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Input.Address" class="form-label">New address</label>
+        <input asp-for="Input.Address" class="form-control" />
+        <span asp-validation-for="Input.Address" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save new address</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

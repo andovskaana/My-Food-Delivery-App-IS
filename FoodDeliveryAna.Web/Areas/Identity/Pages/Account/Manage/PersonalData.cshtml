@@ -1,0 +1,15 @@
+﻿@page
+@model FoodDeliveryAna.Web.Areas.Identity.Pages.Account.Manage.PersonalDataModel
+@{
+    ViewData["Title"] = "Personal data";
+    ViewData["ActivePage"] = FoodDeliveryAna.Web.Areas.Identity.Pages.Account.Manage.ManageNavPages.PersonalData;
+}
+<div class="row">
+    <div class="col-md-9">
+        <h3>Personal data</h3>
+        <p>You can manage or export your personal data from here.</p>
+        <form method="post">
+            <button type="submit" class="btn btn-danger">Request account deletion</button>
+        </form>
+    </div>
+</div>

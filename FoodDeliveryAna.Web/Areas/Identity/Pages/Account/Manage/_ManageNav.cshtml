@@ -1,0 +1,26 @@
+﻿@using FoodDeliveryAna.Domain.Identity
+@using FoodDeliveryAna.Web.Areas.Identity.Pages.Account.Manage
+@inject Microsoft.AspNetCore.Identity.SignInManager<FoodDeliveryApplicationUser> SignInManager
+
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" asp-page="./Index">Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" asp-page="./ChangePassword">Password</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewData["ActivePage"] as string == "Address" ? "active" : "")"
+           asp-page="./Address">Delivery address</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" asp-page="./PersonalData">Personal data</a>
+    </li>
+</ul>
+
+<style>
+    .nav .active {
+        font-weight: 600;
+        text-decoration: underline;
+    }
+</style>
