@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "Your Orders";
-    string Money(decimal v) => v.ToString("C", CultureInfo.CurrentCulture);
+    string Money(decimal v) => v.ToString("N2") + " den";
 
     string StatusCss(FoodDeliveryAna.Domain.Enums.OrderStatus s) => s switch
     {
@@ -230,7 +230,7 @@ else
                             </span>
                         </td>
 
-                        <td data-label="Total" class="fw-semibold">@Money(o.Total)</td>
+                        <td data-label="Total" class="fw-semibold">@o.Total.ToString("N2") den</td>
                         <td data-label="Items"><span class="chip">@itemCount</span></td>
 
                         <td class="text-end" data-label="Actions">

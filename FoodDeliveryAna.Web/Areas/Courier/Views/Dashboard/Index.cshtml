@@ -4,7 +4,8 @@
 
 @{
     ViewData["Title"] = "Courier Dashboard";
-    string Money(decimal v) => v.ToString("C", CultureInfo.CurrentCulture);
+   // string Money(decimal v) => v.ToString("C", CultureInfo.CurrentCulture);
+    string Money(decimal v) => v.ToString("N2") + " den";
     var myId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
     var Placed = FoodDeliveryAna.Domain.Enums.OrderStatus.Placed;
@@ -62,7 +63,7 @@
                             <tr>
                                 <td>@o.Id</td>
                                 <td><span class="badge bg-secondary">@o.Status</span></td>
-                                <td>@Money(o.Total)</td>
+                                <td>@o.Total.ToString("N2") den</td>
                                 <td>@o.CreatedAt.ToLocalTime()</td>
                                 <td class="text-truncate" style="max-width: 280px;" title="@address">@address</td>
                                 <td class="text-end">
@@ -124,15 +125,15 @@
                                                         <tr>
                                                             <td>@(it.MenuItemName ?? it.MenuItem?.Name)</td>
                                                             <td class="text-end">@it.Quantity</td>
-                                                            <td class="text-end">@Money(it.UnitPrice)</td>
-                                                            <td class="text-end">@Money(subtotal)</td>
+                                                            <td class="text-end">@(it.UnitPrice)</td>
+                                                            <td class="text-end">@o.Total.ToString("N2")</td>
                                                         </tr>
                                                     }
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
                                                         <td colspan="3" class="text-end fw-semibold">Total</td>
-                                                        <td class="text-end fw-bold">@Money(o.Total)</td>
+                                                        <td class="text-end fw-bold">@o.Total.ToString("N2")</td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
@@ -185,7 +186,7 @@
                             <tr>
                                 <td>@o.Id</td>
                                 <td><span class="badge bg-info">@o.Status</span></td>
-                                <td>@Money(o.Total)</td>
+                                <td>@o.Total.ToString("N2") den</td>
                                 <td>@o.CreatedAt.ToLocalTime()</td>
                                 <td class="text-truncate" style="max-width: 280px;" title="@address">@address</td>
                                 <td class="text-end">
@@ -232,15 +233,15 @@
                                                         <tr>
                                                             <td>@(it.MenuItemName ?? it.MenuItem?.Name)</td>
                                                             <td class="text-end">@it.Quantity</td>
-                                                            <td class="text-end">@Money(it.UnitPrice)</td>
-                                                            <td class="text-end">@Money(subtotal)</td>
+                                                            <td class="text-end">@it.UnitPrice.ToString("N2") den</td>
+                                                            <td class="text-end">@subtotal.ToString("N2") den</td>
                                                         </tr>
                                                     }
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
                                                         <td colspan="3" class="text-end fw-semibold">Total</td>
-                                                        <td class="text-end fw-bold">@Money(o.Total)</td>
+                                                        <td class="text-end fw-bold">@o.Total.ToString("N2") den</td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
@@ -287,7 +288,7 @@
                             <tr>
                                 <td>@o.Id</td>
                                 <td><span class="badge bg-success">@o.Status</span></td>
-                                <td>@Money(o.Total)</td>
+                                <td>@o.Total.ToString("N2") den</td>
                                 <td>@o.CreatedAt.ToLocalTime()</td>
                                 <td>@o.DeliveredAt?.ToLocalTime()</td>
                                 <td class="text-truncate" style="max-width: 280px;" title="@address">@address</td>
@@ -313,15 +314,15 @@
                                                             <tr>
                                                                 <td>@(it.MenuItemName ?? it.MenuItem?.Name)</td>
                                                                 <td class="text-end">@it.Quantity</td>
-                                                                <td class="text-end">@Money(it.UnitPrice)</td>
-                                                                <td class="text-end">@Money(subtotal)</td>
+                                                                    <td class="text-end">@it.UnitPrice.ToString("N2") den</td>
+                                                                    <td class="text-end">@subtotal.ToString("N2") den</td>
                                                             </tr>
                                                     }
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
                                                         <td colspan="3" class="text-end fw-semibold">Total</td>
-                                                        <td class="text-end fw-bold">@Money(o.Total)</td>
+                                                        <td class="text-end fw-bold">@o.Total.ToString("N2") den</td>
                                                     </tr>
                                                 </tfoot>
                                             </table>

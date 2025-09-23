@@ -182,16 +182,16 @@
                 var sub = item.UnitPrice * item.Quantity;
                 <tr>
                     <td>@item.MenuItemName</td>
-                    <td class="text-end">@item.UnitPrice.ToString("C")</td>
+                    <td class="text-end">@item.UnitPrice.ToString("N2") den</td>
                     <td class="text-end">@item.Quantity</td>
-                    <td class="text-end">@sub.ToString("C")</td>
+                    <td class="text-end">@sub.ToString("N2") den</td>
                 </tr>
             }
         </tbody>
         <tfoot>
             <tr>
                 <td colspan="3" class="text-end">Total</td>
-                <td class="text-end">@Model.Total.ToString("C")</td>
+                <td class="text-end">@Model.Total.ToString("N2") den</td>
             </tr>
         </tfoot>
     </table>

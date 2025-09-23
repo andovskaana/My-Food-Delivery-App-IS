@@ -13,7 +13,7 @@
 
             <div id="payment-element" class="mb-3"></div>
             <div id="payment-errors" class="text-danger small mb-2"></div>
-            <button id="pay-btn" class="btn btn-primary w-100">Pay @total.ToString("C")</button>
+            <button id="pay-btn" class="btn btn-primary w-100">Pay @total.ToString("N2") den</button>
             <p class="text-muted small mt-2">Test mode. No real payment is processed.</p>
         </div>
     </div>
@@ -26,13 +26,13 @@
                 {
                     <li class="d-flex justify-content-between mb-2">
                         <span>@i.MenuItem?.Name x @i.Quantity</span>
-                        <span>@(((i.MenuItem?.Price ?? 0m) * i.Quantity).ToString("C"))</span> @* NOTE the @ before the expression *@
+                        <span>@(((i.MenuItem?.Price ?? 0m) * i.Quantity).ToString("N2")) den</span> @* NOTE the @ before the expression *@
                     </li>
                 }
             </ul>
             <hr />
             <div class="d-flex justify-content-between fw-semibold">
-                <span>Total</span><span>@total.ToString("C")</span>
+                <span>Total</span><span>@total.ToString("N2") den</span>
             </div>
         </div>
     </div>

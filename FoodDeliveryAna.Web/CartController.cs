@@ -96,8 +96,8 @@ namespace FoodDeliveryAna.Web
             return Json(new
             {
                 ok = true,
-                itemTotal = itemTotal.ToString("C"),
-                subtotal = subtotal.ToString("C")
+                itemTotal = itemTotal.ToString("N2") ,
+                subtotal = subtotal.ToString("N2")
             });
         }
     }
