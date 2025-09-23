@@ -269,8 +269,8 @@
                                             <input type="hidden" name="menuItemId" value="@item.Id" />
                                             <input type="number" name="quantity" value="1" min="1"
                                                    class="form-control form-control-sm"
-                                                   style="width:72px;" />
-                                            <button type="submit" class="btn btn-sm btn-primary">Add</button>
+                                                   style="width:72px;" @(isOpen ? "" : "disabled") />
+                                            <button type="submit" class="btn btn-sm btn-primary" @(isOpen ? "" : "disabled")>Add</button>
                                         </form>
                                     </td>
                                 </tr>

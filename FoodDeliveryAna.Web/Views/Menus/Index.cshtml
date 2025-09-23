@@ -1,4 +1,5 @@
 @model IEnumerable<FoodDeliveryAna.Domain.DomainModels.MenuItem>
+@inject FoodDeliveryAna.Service.IRestaurantOpenStatusService StatusService
 @{
     ViewData["Title"] = "Menu";
 
@@ -27,10 +28,14 @@
     string query = Context.Request.Query["q"];
 
     // Helper to build url while preserving q
-    string rf(string restSlug) => Url.Action("Index", "Menus", new {
+    string rf(string restSlug) => Url.Action("Index", "Menus", new
+    {
         q = query,
         restaurant = restSlug
     })!;
+
+    // Fetch live statuses once
+    var statuses = await StatusService.GetStatusesAsync();
 }
 
 <h1 class="h4 fw-semibold mb-3">Menu items</h1>
@@ -66,104 +71,114 @@
 </div>
 
 <div class="row g-4">
-@foreach (var m in Model)
-{
-    var img = string.IsNullOrWhiteSpace(m.ImageUrl) ? "/images/placeholder-food.jpg" : m.ImageUrl;
-    var restaurant = m.Menu?.Restaurant?.Name ?? "Restaurant";
-    var desc = string.IsNullOrWhiteSpace(m.Description) ? "No description." : m.Description;
+    @foreach (var m in Model)
+    {
+        var img = string.IsNullOrWhiteSpace(m.ImageUrl) ? "/images/placeholder-food.jpg" : m.ImageUrl;
+        var restaurant = m.Menu?.Restaurant?.Name ?? "Restaurant";
+        var desc = string.IsNullOrWhiteSpace(m.Description) ? "No description." : m.Description;
 
-    <div class="col-12 col-sm-6 col-lg-4">
-        <!-- Make the whole card clickable (popup), except the add-to-cart area -->
-        <div class="card h-100 menu-item-card"
-             data-item-name="@m.Name"
-             data-item-img="@img"
-             data-item-desc="@desc">
-            <img class="card-img-top" src="@img" alt="@m.Name" loading="lazy" />
-            <div class="card-body d-flex flex-column">
-                <div class="d-flex justify-content-between align-items-start">
-                    <h5 class="card-title mb-1">@m.Name</h5>
+        // Determine open/closed for this item's restaurant
+        var st = statuses.FirstOrDefault(s =>
+        string.Equals(s.RestaurantName, restaurant, System.StringComparison.OrdinalIgnoreCase));
+        var isOpen = st?.IsOpen == true;
+
+        <div class="col-12 col-sm-6 col-lg-4">
+            <!-- Make the whole card clickable (popup), except the add-to-cart area -->
+            <div class="card h-100 menu-item-card"
+                 data-item-name="@m.Name"
+                 data-item-img="@img"
+                 data-item-desc="@desc">
+                <img class="card-img-top" src="@img" alt="@m.Name" loading="lazy" />
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="card-title mb-1">@m.Name</h5>
                         <span class="badge bg-primary fs-6">@m.Price.ToString("N2") den</span>
-                </div>
-                <div class="text-muted small mb-3">from @restaurant</div>
+                    </div>
+                    <div class="text-muted small mb-3">from @restaurant</div>
 
-                <!-- Add-to-cart should NOT trigger modal -->
-                <div class="no-popup mt-auto">
-                    <form asp-controller="Cart" asp-action="Add" method="post">
-                        <input type="hidden" name="menuItemId" value="@m.Id" />
-                        <button type="submit" class="btn btn-primary w-100 btn-pill">Add to cart</button>
-                    </form>
+                    @if (!isOpen)
+                    {
+                        <div class="text-danger small mb-2 fw-semibold">Closed</div>
+                    }
+
+                    <!-- Add-to-cart should NOT trigger modal -->
+                    <div class="no-popup mt-auto">
+                        <form asp-controller="Cart" asp-action="Add" method="post">
+                            <input type="hidden" name="menuItemId" value="@m.Id" />
+                            <button type="submit" class="btn btn-primary w-100 btn-pill" @(isOpen ? "" : "disabled")>Add to cart</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-}
+    }
 </div>
 
 <!-- Modal (Bootstrap 5) -->
 <div class="modal fade" id="menuItemModal" tabindex="-1" aria-labelledby="menuItemModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-md">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="menuItemModalLabel">Item</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="d-flex gap-3 align-items-start">
-          <img id="menuItemModalImg" src="" alt="" class="rounded"
-               style="width:140px;height:140px;object-fit:cover;border:1px solid rgba(0,0,0,.08);background:#f8f9fa;" />
-          <p id="menuItemModalDesc" class="mb-0"></p>
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="menuItemModalLabel">Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex gap-3 align-items-start">
+                    <img id="menuItemModalImg" src="" alt="" class="rounded"
+                         style="width:140px;height:140px;object-fit:cover;border:1px solid rgba(0,0,0,.08);background:#f8f9fa;" />
+                    <p id="menuItemModalDesc" class="mb-0"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
     </div>
-  </div>
 </div>
 
 @section Scripts {
-<script>
-  // Auto-submit dropdown on change (preserving q)
-  (function () {
-    const sel = document.getElementById('restaurantSelect');
-    const form = document.getElementById('restaurantFilterForm');
-    if (sel && form) {
-      sel.addEventListener('change', () => form.submit());
-    }
-  })();
+    <script>
+        // Auto-submit dropdown on change (preserving q)
+        (function () {
+          const sel = document.getElementById('restaurantSelect');
+          const form = document.getElementById('restaurantFilterForm');
+          if (sel && form) {
+            sel.addEventListener('change', () => form.submit());
+          }
+        })();
 
-  // Card click -> modal (ignore clicks inside .no-popup)
-  (function () {
-    document.addEventListener('click', (e) => {
-      const card = e.target.closest('.menu-item-card');
-      if (!card) return;
-      if (e.target.closest('.no-popup')) return; // don't open when clicking buttons/inputs
+        // Card click -> modal (ignore clicks inside .no-popup)
+        (function () {
+          document.addEventListener('click', (e) => {
+            const card = e.target.closest('.menu-item-card');
+            if (!card) return;
+            if (e.target.closest('.no-popup')) return; // don't open when clicking buttons/inputs
 
-      const name = card.getAttribute('data-item-name') || 'Item';
-      const desc = card.getAttribute('data-item-desc') || 'No description.';
-      const img  = card.getAttribute('data-item-img') || '';
+            const name = card.getAttribute('data-item-name') || 'Item';
+            const desc = card.getAttribute('data-item-desc') || 'No description.';
+            const img  = card.getAttribute('data-item-img') || '';
 
-      document.getElementById('menuItemModalLabel').textContent = name;
-      const imgEl = document.getElementById('menuItemModalImg');
-      const descEl = document.getElementById('menuItemModalDesc');
+            document.getElementById('menuItemModalLabel').textContent = name;
+            const imgEl = document.getElementById('menuItemModalImg');
+            const descEl = document.getElementById('menuItemModalDesc');
 
-      descEl.textContent = desc;
-      if (img) {
-        imgEl.src = img;
-        imgEl.alt = name;
-        imgEl.classList.remove('d-none');
-      } else {
-        imgEl.src = '';
-        imgEl.alt = '';
-        imgEl.classList.add('d-none');
-      }
+            descEl.textContent = desc;
+            if (img) {
+              imgEl.src = img;
+              imgEl.alt = name;
+              imgEl.classList.remove('d-none');
+            } else {
+              imgEl.src = '';
+              imgEl.alt = '';
+              imgEl.classList.add('d-none');
+            }
 
-      if (window.bootstrap && bootstrap.Modal) {
-        new bootstrap.Modal(document.getElementById('menuItemModal')).show();
-      } else {
-        alert(name + "\n\n" + desc);
-      }
-    });
-  })();
-</script>
+            if (window.bootstrap && bootstrap.Modal) {
+              new bootstrap.Modal(document.getElementById('menuItemModal')).show();
+            } else {
+              alert(name + "\n\n" + desc);
+            }
+          });
+        })();
+    </script>
 }
